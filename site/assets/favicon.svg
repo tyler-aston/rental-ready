@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Neighbor Rental-Ready">
+  <rect width="512" height="512" rx="115" fill="#1767FF"/>
+  <path d="M256 128 416 264h-46v136H142V264H96Z" fill="#FFFFFF"/>
+  <rect x="228" y="316" width="56" height="84" rx="10" fill="#1767FF"/>
+</svg>

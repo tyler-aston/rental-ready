@@ -1,0 +1,79 @@
+    <section id="s4">
+      <div class="eyebrow" data-n="04">Metrics &amp; rollout</div>
+      <h2 class="sec-h2">One booking is worth a year of storage margin.</h2>
+      <p class="sec-lede">Storage is a great wedge and a thin margin. Rental on the same asset, on the same lot, is the same relationship at <b>~12× the take per transaction</b> — and it makes the storage side stickier, not weaker.</p>
+
+      <div class="tbl-scroll"><table class="nbt">
+        <thead><tr><th>Per transaction</th><th>Storage today</th><th>Rental proposed</th></tr></thead>
+        <tbody>
+          <tr><td>Typical transaction</td><td class="num">$185 / month</td><td class="num">$580 / booking <small>4 nights × $145</small></td></tr>
+          <tr><td>Neighbor take</td><td class="num">4.9% + $0.30 = <b>$9.37</b><small>host fee</small></td><td class="num money">≈ $116 <small>modeled at 20% gross, incl. renter fees — Outdoorsy runs 20–25%; Neighbor's handoff-cost advantage means it can price under that and still profit</small></td></tr>
+          <tr><td>Equivalent</td><td class="num">1 month of margin</td><td class="num money">≈ 12 months of storage margin, same asset</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="tbl-scroll"><table class="nbt">
+        <thead><tr><th>Metric</th><th>Definition</th><th>Pilot target</th></tr></thead>
+        <tbody>
+          <tr><td>Activation rate <small>north star</small></td><td>% of eligible storage renters who enable rental within 60 days of a billing push</td><td class="num">≥ 5%</td></tr>
+          <tr><td>Time to first booking</td><td>Median days from activation to first accepted request</td><td class="num">≤ 30 days</td></tr>
+          <tr><td>Offset ratio <small>the metric only Neighbor can report</small></td><td>Share of activated owners' storage bills covered by rental earnings</td><td class="num money">≥ 50%</td></tr>
+          <tr><td>Host opt-out rate <small>guardrail</small></td><td>Handoff Hosts who turn handoffs back off per quarter</td><td class="num">&lt; 5%</td></tr>
+          <tr><td>Handoff dispute rate <small>guardrail</small></td><td>Handoffs ending in a damage or access dispute</td><td class="num">&lt; 1%</td></tr>
+          <tr><td>Storage churn, activated cohort <small>guardrail</small></td><td>Must be at or below the non-activated cohort — the retention thesis</td><td class="num">≤ baseline</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="phase-grid">
+        <div class="phase">
+          <div class="phase__n">Phase 1 · Q4 '26</div>
+          <h3>Phoenix pilot</h3>
+          <p>One RV-dense metro. ~200 stored Class B/C vehicles, concierge onboarding, manual vehicle vetting, Neighbor staff shadowing the first 50 handoffs.</p>
+          <div class="phase__gate">Gate: ≥5% activation · &lt;1% disputes</div>
+        </div>
+        <div class="phase">
+          <div class="phase__n">Phase 2 · H1 '27</div>
+          <h3>RVshare cohort</h3>
+          <p>Make the partnership bidirectional: RVshare-referred vehicles arrive rental-eligible, and "store it free" co-marketing turns their owner base into instant supply.</p>
+          <div class="phase__gate">Gate: host opt-in ≥30% in pilot metros</div>
+        </div>
+        <div class="phase">
+          <div class="phase__n">Phase 3 · H2 '27</div>
+          <h3>GA + boats + depot hubs</h3>
+          <p>Boats as the long tail. Commercial-lot operators — the Fifth Wall / Acadia / Jamestown side of the network — become staffed depot hubs with fleet tooling.</p>
+          <div class="phase__gate">Gate: unit economics ≥ pilot at 10× volume</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="eyebrow" data-n="05">Risks</div>
+      <h2 class="sec-h2">What could kill it, and what we'd do about it.</h2>
+      <div class="tbl-scroll"><table class="nbt">
+        <thead><tr><th>Risk</th><th>Why it's real</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td>Insurance coverage</td><td>A stored vehicle and a rented vehicle are different underwriting problems; the $1M host protection doesn't cover a renter driving away.</td><td>Bolt-on rental coverage via a specialty carrier, priced into the renter's service fee — the RVshare/Outdoorsy model. Rental stays off until coverage binds.</td></tr>
+          <tr><td>Host disruption &amp; churn</td><td>Strangers on the lot is exactly what some storage hosts signed up to avoid. Silent resentment becomes supply churn.</td><td>Consent-first (screen 6), per-request veto, frequency caps, and real pay — the Handoff Host tier. Watch the opt-out guardrail weekly.</td></tr>
+          <tr><td>RVshare relationship</td><td>Neighbor's rental side competes with the partner that currently sends it storage demand.</td><td>Frame as bidirectional flywheel and bring them into Phase 2 economics before GA. The renegotiation window is a date on the calendar, not a surprise.</td></tr>
+          <tr><td>First-time-lister quality</td><td>Stored vehicles skew idle; idle vehicles skew unmaintained. A bad first trip burns the renter and the lot.</td><td>Eligibility gates (model year, days since last movement, photo review), a pre-rental inspection add-on Handoff Hosts can perform — for a fee.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h2 class="sec-h2" style="font-size:clamp(22px,2.4vw,28px)">Assumptions to validate in week one</h2>
+      <p class="prose">Five things this design assumes that I'd pressure-test with internal data before writing a line of code: <b>(1)</b> current storage protection is bolt-on-extendable for rental rather than needing a new carrier; <b>(2)</b> identity verification depth today (ID scan on file?) — determines whether rental eligibility is one click or one flow; <b>(3)</b> whether storage hosts can already see what's parked on their lot in real time — shapes the consent UX; <b>(4)</b> the 20% take-rate model against Neighbor's actual cost per handoff; <b>(5)</b> whether commercial-lot operators want fleet tooling now or in Phase 3.</p>
+    </section>
+
+    <section id="s6">
+      <div class="eyebrow" data-n="06">Talk track</div>
+      <h2 class="sec-h2">The 30-second spine.</h2>
+      <p class="sec-lede">Numbers map to the sections on the left — this page is the deck. <b>Placeholder draft; tune to your voice.</b></p>
+      <div class="talk">
+        <p>"Neighbor already has RVshare sending RV owners to us for storage — and we send nobody back.<span class="cue">1</span> Those vehicles sit on our lots, described in our data, generating a bill we deliver every month. That's three advantages no rental marketplace can copy.<span class="cue">2</span> So the journey starts at the bill: not 'earn income' — 'cancel your storage bill.'<span class="cue">3</span> Here's the prototype: billing push to rental-ready in five taps, with the storage host's consent designed in from the start.<span class="cue">4</span> One booking is worth about a year of storage margin on the same asset.<span class="cue">5</span> The risks are real but ownable — insurance first.<span class="cue">6</span> I'd pilot in Phoenix this quarter with the RVshare cohort next."</p>
+        <div class="talk__note">≈ 30 seconds spoken · sections 1–6 in order · prototype is the centerpiece, lead with the phone if time is short.</div>
+      </div>
+    </section>
+
+    <footer class="colophon">
+      <span>Prepared by Tyler Aston for the Neighbor PM take-home · August 2026</span>
+      <span>Built on Neighbor's live design system — tokens extracted from neighbor.com on Aug 23, 2026</span>
+    </footer>

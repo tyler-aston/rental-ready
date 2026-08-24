@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Petrona:wght@400;500;700&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #FFFFFF;
+    display: grid; grid-template-columns: 1fr 430px;
+    color: #232323;
+  }
+  .left { padding: 74px 0 66px 76px; display: flex; flex-direction: column; }
+  .eyebrow {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 15px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase;
+    color: #63666A; margin-bottom: 30px;
+  }
+  .eyebrow .mark {
+    width: 30px; height: 30px; border-radius: 7px; background: #1767FF;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .eyebrow b { color: #1767FF; font-weight: 700; }
+  h1 {
+    font-family: 'Petrona', Georgia, serif; font-weight: 400;
+    font-size: 68px; line-height: 1.06; letter-spacing: -0.03em;
+    color: #373A36; max-width: 13ch; margin-bottom: 26px;
+  }
+  .sub { font-size: 21px; line-height: 31px; color: #63666A; max-width: 34ch; }
+  .sub b { color: #232323; font-weight: 600; }
+
+  .flip { margin-top: auto; display: flex; align-items: flex-end; gap: 22px; }
+  .amt { display: flex; flex-direction: column; gap: 4px; }
+  .amt span {
+    font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #888B8D;
+  }
+  .amt b {
+    font-family: 'Petrona', Georgia, serif; font-weight: 400; font-size: 52px; line-height: 1;
+    color: #888B8D; text-decoration: line-through; text-decoration-thickness: 2px;
+  }
+  .amt.now span { color: #00573F; }
+  .amt.now b { color: #00573F; text-decoration: none; }
+  .arrow { color: #1767FF; padding-bottom: 12px; }
+  .byline {
+    margin-top: 34px; padding-top: 22px; border-top: 1px solid #EBEBEB;
+    font-size: 17px; color: #63666A;
+  }
+  .byline b { color: #232323; font-weight: 600; }
+
+  /* right — lock screen with the real push */
+  .right { position: relative; background: #F4F5F7; overflow: hidden; }
+  .phone {
+    position: absolute; left: 46px; top: 58px; width: 340px; height: 620px;
+    background: linear-gradient(168deg,#0E1B33 0%,#14264A 52%,#0F1E3C 100%);
+    border: 10px solid #1B1B1F; border-radius: 46px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.28);
+  }
+  .notch {
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    width: 104px; height: 27px; background: #1B1B1F; border-radius: 16px;
+  }
+  .date { text-align: center; margin-top: 66px; font-size: 15px; font-weight: 500; color: rgba(255,255,255,.82); }
+  .time { text-align: center; font-size: 70px; line-height: 1.05; font-weight: 300; color: #fff; }
+  .push {
+    margin: 34px 13px 0; background: rgba(250,250,252,.94); border-radius: 21px;
+    padding: 13px 14px; display: flex; gap: 11px; align-items: flex-start;
+  }
+  .push .ico {
+    flex: 0 0 38px; width: 38px; height: 38px; border-radius: 9px; background: #1767FF;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .meta { display: flex; justify-content: space-between; font-size: 12px; color: #63666A; margin-bottom: 2px; }
+  .ttl { display: block; font-size: 14.5px; line-height: 19px; font-weight: 600; }
+  .bdy { display: block; font-size: 14px; line-height: 18px; color: #3C3F44; }
+</style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute"><defs>
+    <symbol id="h" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 11.2 12 4l9 7.2"/><path d="M5.6 9.8V20h12.8V9.8"/>
+    </symbol>
+  </defs></svg>
+
+  <div class="left">
+    <div class="eyebrow">
+      <span class="mark"><svg width="17" height="17" style="color:#fff"><use href="#h"/></svg></span>
+      <span><b>Neighbor</b> &nbsp;Rental-Ready</span>
+    </div>
+    <h1>Cancel your storage bill.</h1>
+    <p class="sub">The vehicles are already on the lot. Turn every stored RV into
+      <b>rental supply</b> &mdash; and the storage space into the depot.</p>
+
+    <div class="flip">
+      <div class="amt"><span>Storage bill</span><b>&minus;$185</b></div>
+      <div class="arrow">
+        <svg width="42" height="42" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 21h26M25 12l9 9-9 9"/>
+        </svg>
+      </div>
+      <div class="amt now"><span>After one booking</span><b>$0</b></div>
+    </div>
+    <div class="byline">PM take-home &middot; <b>Tyler Aston</b> &middot; August 2026</div>
+  </div>
+
+  <div class="right">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="date">Monday, August 24</div>
+      <div class="time">9:41</div>
+      <div class="push">
+        <span class="ico"><svg width="21" height="21" style="color:#fff"><use href="#h"/></svg></span>
+        <span style="flex:1">
+          <span class="meta"><span>NEIGHBOR</span><span>now</span></span>
+          <span class="ttl">Your Minnie cost you $185 this month.</span>
+          <span class="bdy">It could have earned $474 instead.</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

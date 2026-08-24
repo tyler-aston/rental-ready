@@ -1,0 +1,473 @@
+/* ============================================================
+   Neighbor.com design tokens — v2 (comprehensive)
+   Extracted 2026-08-23 from https://www.neighbor.com across:
+     - / (homepage, desktop + mobile)
+     - /rv-storage-near-me (category landing)
+     - /search (results + map, real listing cards)
+     - /auth/register (form pattern)
+     - /host (marketing landing, full type scale)
+   Plus historical app screenshots from sidehustlenation.com
+   (listing flow, smart pricing, vouches).
+
+   Neighbor uses Tailwind with a custom theme. Their color names:
+     - Primary blue = `blue-40` / `blue-50` (hover)
+     - Accents are named after Karate Kid characters (miyagi,
+       matthew, etc.) — no joke.
+     - Text uses two near-blacks: #232323 (cool) and #373A36 (warm)
+   ============================================================ */
+
+:root {
+  /* --- Brand ------------------------------------------------- */
+  --nb-blue: #1767FF;             /* wordmark, primary CTAs, map pins (blue-40) */
+  --nb-blue-hover: #0F57E0;       /* darker hover state (blue-50 approximation) */
+  --nb-blue-search: #0079E1;      /* search submit + "OPEN" app pill */
+  --nb-blue-tint: #BADFEE;        /* star rating pastel */
+  --nb-blue-info-bg: #EFF5F8;     /* trust-banner background (light blue tint) */
+  --nb-link: #0067C0;             /* inline text-link color */
+
+  /* --- Green (dollar amounts + promos) — CRITICAL for pricing */
+  --nb-green: #00573F;            /* price text — active/discounted amount */
+  --nb-green-tint: #EAF4DD;       /* promo pill background */
+
+  /* --- Cream (Top Host / trust badges) --------------------- */
+  --nb-cream: #FFF8DE;            /* Top Host badge bg (yellow-10) */
+
+  /* --- Star rating ----------------------------------------- */
+  --nb-star: #FFB800;             /* filled rating stars are amber, not blue */
+
+  /* --- Neutrals -------------------------------------------- */
+  --nb-text:       #232323;       /* cool near-black (gray-80) */
+  --nb-text-warm:  #373A36;       /* warm near-black — used on marketing/hosts pages */
+  --nb-text-muted: #63666A;       /* icons, placeholder, meta (gray-60) */
+  --nb-text-faint: #888B8D;       /* strikethrough was-price color (gray-50) */
+  --nb-border:     #EBEBEB;       /* hairline borders (gray-30) */
+  --nb-border-nav: #EBECF0;       /* nav-outline button border (slightly cooler) */
+  --nb-surface-hover: #F5F5F5;    /* hover fill on ghost buttons (gray-20) */
+  --nb-white:    #FEFEFE;         /* Neighbor's "white" — not pure #FFF */
+  --nb-page:     #FFFFFF;
+
+  /* --- Type -------------------------------------------------- */
+  --nb-font-display: 'GT-Ultra', 'GT-Ultra-Fallback', ui-serif, Georgia, 'Times New Roman', Times, serif;
+  --nb-font-body:    'Inter', Roboto, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Type scale — captured from real elements */
+  /* Hero (only place GT-Ultra is bold; every other serif heading is 400) */
+  --nb-hero-size: 64px;   --nb-hero-lh: 76.8px;  --nb-hero-ls: -1.792px;  --nb-hero-weight: 700;
+
+  /* Section H2 large (GT-Ultra 400, marketing) */
+  --nb-h2-lg-size: 44px;  --nb-h2-lg-lh: 52.8px; --nb-h2-lg-ls: -1.232px;
+
+  /* Section H2 medium (GT-Ultra 400, marketing) */
+  --nb-h2-md-size: 40px;  --nb-h2-md-lh: 48px;   --nb-h2-md-ls: -1.12px;
+
+  /* Subhead H2 (Inter 400, marketing) */
+  --nb-h2-sub-size: 26px; --nb-h2-sub-lh: 35px;  --nb-h2-sub-ls: -0.26px;
+
+  /* Ambient / section H3 (Inter) */
+  --nb-h3-size: 22px;     --nb-h3-lh: 30px;      --nb-h3-weight: 500;
+
+  --nb-body-size: 16px;   --nb-body-lh: 24px;
+  --nb-small-size: 14px;  --nb-small-lh: 20px;
+  --nb-micro-size: 12px;  --nb-micro-lh: 16px;
+
+  /* --- Radii ------------------------------------------------- */
+  --nb-r-xs:    4px;      /* promo pill (small) */
+  --nb-r-sm:    8px;      /* Top Host badge */
+  --nb-r-md:    12px;     /* buttons (ghost/nav), cards, dropdowns */
+  --nb-r-lg:    16px;     /* booking panel, larger cards */
+  --nb-r-chip:  30px;     /* filter chips (outlined) */
+  --nb-r-pill:  50px;     /* filled primary CTA */
+  --nb-r-full:  9999px;   /* circular buttons, map pins, mobile search */
+
+  /* --- Elevation / motion ---------------------------------- */
+  --nb-shadow-pin:  0 1.2px 3.7px rgba(0, 0, 0, 0.20);
+  --nb-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --nb-shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --nb-shadow-nav:  0 1px 0 rgba(0, 0, 0, 0.04);
+  --nb-ease:        cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ============================================================
+   Font faces — from Neighbor's CDN.
+   GT-Ultra is proprietary (Grilli Type); referencing for a
+   candidate mockup shown to Neighbor is fine — do not
+   redistribute the font files.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Inter';
+  src: url('https://d9lvjui2ux1xa.cloudfront.net/fonts/v3/Inter-VariableFont.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'GT-Ultra';
+  src: url('https://d9lvjui2ux1xa.cloudfront.net/fonts/v3/gt-ultra-median-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'GT-Ultra';
+  src: url('https://d9lvjui2ux1xa.cloudfront.net/fonts/v3/gt-ultra-median-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+html { font-size: 16px; }
+body {
+  font-family: var(--nb-font-body);
+  color: var(--nb-text);
+  background: var(--nb-page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Hero (bold serif, only used on H1s) */
+.nb-hero, h1.nb-hero {
+  font-family: var(--nb-font-display);
+  font-weight: var(--nb-hero-weight);
+  font-size: var(--nb-hero-size);
+  line-height: var(--nb-hero-lh);
+  letter-spacing: var(--nb-hero-ls);
+  color: var(--nb-text-warm);
+}
+/* Section heading — regular-weight serif (this is Neighbor's editorial signature) */
+.nb-h2-lg { font-family: var(--nb-font-display); font-weight: 400; font-size: var(--nb-h2-lg-size); line-height: var(--nb-h2-lg-lh); letter-spacing: var(--nb-h2-lg-ls); color: var(--nb-text-warm); }
+.nb-h2-md { font-family: var(--nb-font-display); font-weight: 400; font-size: var(--nb-h2-md-size); line-height: var(--nb-h2-md-lh); letter-spacing: var(--nb-h2-md-ls); color: var(--nb-text-warm); }
+/* Subhead in body font */
+.nb-subhead { font-family: var(--nb-font-body); font-weight: 400; font-size: var(--nb-h2-sub-size); line-height: var(--nb-h2-sub-lh); letter-spacing: var(--nb-h2-sub-ls); color: var(--nb-text-warm); }
+
+a.nb-link { color: var(--nb-link); text-decoration: none; }
+a.nb-link:hover { text-decoration: underline; }
+
+/* ============================================================
+   Component recipes — copy any of these to start a screen.
+   All classes prefixed `nb-` to avoid Tailwind collisions.
+   ============================================================ */
+
+/* --- Buttons --------------------------------------------- */
+
+/* Primary CTA (filled pill) — marketing / conversion surfaces */
+.nb-btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--nb-blue);
+  color: var(--nb-white);
+  border: none;
+  border-radius: var(--nb-r-pill);
+  padding: 10px 24px;                 /* marketing padding */
+  font-family: var(--nb-font-body);
+  font-size: 18px;
+  font-weight: 500;                   /* marketing CTAs use 500 */
+  cursor: pointer;
+  transition: transform 150ms var(--nb-ease), background 150ms var(--nb-ease);
+}
+.nb-btn-primary:hover { background: var(--nb-blue-hover); }
+.nb-btn-primary:active { transform: scale(0.98); }
+
+/* Primary — full width (form / conversion) */
+.nb-btn-primary--block {
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Secondary — outlined pill button */
+.nb-btn-secondary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: transparent;
+  color: var(--nb-text-warm);
+  border: 1px solid var(--nb-border-nav);
+  border-radius: var(--nb-r-pill);
+  padding: 14px 24px;
+  font-family: var(--nb-font-body);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 150ms var(--nb-ease);
+}
+.nb-btn-secondary:hover { background: var(--nb-surface-hover); }
+
+/* Nav-outline (12px radius, not pill) — the "Become a host" style */
+.nb-btn-nav-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent;
+  color: var(--nb-text-warm);
+  border: 1px solid var(--nb-border-nav);
+  border-radius: var(--nb-r-md);
+  padding: 14px 24px;
+  font-family: var(--nb-font-body);
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+/* Ghost / nav link — transparent-until-hover reveals border */
+.nb-btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent;
+  color: var(--nb-text);
+  border: 1px solid transparent;
+  border-radius: var(--nb-r-md);
+  padding: 12px 16px;
+  font-family: var(--nb-font-body);
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: border-color 150ms var(--nb-ease);
+}
+.nb-btn-ghost:hover { border-color: var(--nb-border); }
+
+/* Text-only "Skip for now →" style link */
+.nb-btn-text {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent; border: none; padding: 8px 4px;
+  color: var(--nb-link); font-weight: 500; cursor: pointer;
+}
+
+/* Circular search / icon action */
+.nb-btn-icon {
+  width: 60px; height: 60px;
+  border-radius: var(--nb-r-full);
+  background: var(--nb-blue-search);
+  color: var(--nb-white);
+  border: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* --- Chips (filter row / category picker) ---------------- */
+
+.nb-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent;
+  color: var(--nb-text-warm);
+  border: 1px solid var(--nb-border);
+  border-radius: var(--nb-r-chip);
+  padding: 6px 12px;
+  font-size: 14px; font-weight: 400;
+  cursor: pointer;
+  transition: border-color 150ms var(--nb-ease), background 150ms var(--nb-ease);
+}
+.nb-chip:hover { border-color: var(--nb-text-warm); }
+.nb-chip--active {
+  background: rgba(23, 103, 255, 0.08);
+  border-color: var(--nb-blue);
+  color: var(--nb-blue);
+}
+
+/* --- Cards ----------------------------------------------- */
+
+/* Generic card (category tile, offset dashboard tile) */
+.nb-card {
+  background: var(--nb-white);
+  border: 1px solid var(--nb-border);
+  border-radius: var(--nb-r-md);
+  padding: 20px;
+  transition: box-shadow 150ms var(--nb-ease), transform 150ms var(--nb-ease);
+}
+.nb-card:hover { box-shadow: var(--nb-shadow-lift); transform: translateY(-1px); }
+
+/* Radio-card (selected has blue accent, unselected outline) */
+.nb-radio-card {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--nb-white);
+  border: 1px solid var(--nb-border);
+  border-radius: var(--nb-r-md);
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: border-color 150ms var(--nb-ease), box-shadow 150ms var(--nb-ease);
+}
+.nb-radio-card--selected {
+  border-color: var(--nb-blue);
+  box-shadow: 0 0 0 1px var(--nb-blue) inset;
+}
+.nb-radio-card__dot {
+  width: 20px; height: 20px; flex: 0 0 20px; border-radius: 50%;
+  border: 2px solid var(--nb-border);
+  margin-top: 2px;
+}
+.nb-radio-card--selected .nb-radio-card__dot {
+  border-color: var(--nb-blue);
+  background: radial-gradient(circle, var(--nb-blue) 0 50%, transparent 55%);
+}
+
+/* Booking / price panel (floating right-side card on listing detail) */
+.nb-price-panel {
+  background: var(--nb-white);
+  border: 1px solid var(--nb-border);
+  border-radius: var(--nb-r-lg);
+  padding: 20px 24px;
+  box-shadow: var(--nb-shadow-card);
+}
+.nb-price-panel__row { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; }
+.nb-price-panel__label { color: var(--nb-text-warm); font-size: 14px; }
+.nb-price-panel__value-was { color: var(--nb-text-faint); text-decoration: line-through; font-size: 14px; margin-right: 8px; }
+.nb-price-panel__value-now { color: var(--nb-green); font-weight: 600; font-size: 16px; }
+.nb-price-panel__total { border-top: 1px solid var(--nb-border); margin-top: 8px; padding-top: 12px; }
+.nb-price-panel__total .nb-price-panel__value-now { font-size: 22px; }
+
+/* --- Badges & pills -------------------------------------- */
+
+/* Top Host / cream badge */
+.nb-badge-top-host {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--nb-cream);
+  color: var(--nb-text-warm);
+  border-radius: var(--nb-r-sm);
+  padding: 5px 8px;
+  font-size: 12px; font-weight: 600;
+}
+
+/* Promo pill (green) */
+.nb-badge-promo {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--nb-green-tint);
+  color: var(--nb-green);
+  border-radius: var(--nb-r-xs);
+  padding: 4px 6px;
+  font-size: 12px; font-weight: 600;
+}
+
+/* Map price pin */
+.nb-price-pin {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--nb-blue);
+  color: var(--nb-white);
+  border-radius: var(--nb-r-full);
+  padding: 6px 12px;
+  font-size: 14px; font-weight: 600;
+  box-shadow: var(--nb-shadow-pin);
+}
+
+/* --- Search bar (desktop 3-segment pill) ----------------- */
+
+.nb-searchbar {
+  display: inline-flex; align-items: center;
+  background: var(--nb-white);
+  border-radius: var(--nb-r-full);
+  padding: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+.nb-searchbar__segment {
+  padding: 10px 20px;
+  display: flex; flex-direction: column;
+  border-right: 1px solid var(--nb-border);
+}
+.nb-searchbar__segment:last-of-type { border-right: none; }
+.nb-searchbar__segment-label { font-size: 12px; font-weight: 600; color: var(--nb-text); }
+.nb-searchbar__segment-value { font-size: 14px; color: var(--nb-text-muted); }
+
+/* --- Nav bar (desktop) ----------------------------------- */
+
+.nb-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 68px; padding: 0 24px;
+  background: var(--nb-white);
+  box-shadow: var(--nb-shadow-nav);
+  position: sticky; top: 0; z-index: 40;
+}
+.nb-nav__brand {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--nb-blue);
+  font-family: var(--nb-font-body);
+  font-weight: 700; font-size: 24px;
+}
+
+/* --- App promo banner (mobile top strip) ----------------- */
+
+.nb-app-promo {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  background: var(--nb-white);
+  border-bottom: 1px solid var(--nb-border);
+}
+.nb-app-promo__icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--nb-blue);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--nb-white);
+}
+.nb-app-promo__cta {
+  margin-left: auto; padding: 8px 18px;
+  border-radius: var(--nb-r-full);
+  background: var(--nb-blue-search);
+  color: var(--nb-white);
+  font-size: 14px; font-weight: 700; border: none; cursor: pointer;
+}
+
+/* --- Flow / setup patterns (List-your-space UX) ---------- */
+
+/* Flow header — title with blue progress bar underneath */
+.nb-flow-header {
+  padding: 16px 20px 0;
+  border-bottom: 1px solid var(--nb-border);
+  text-align: center;
+}
+.nb-flow-header__title { font-size: 16px; font-weight: 600; color: var(--nb-text); padding-bottom: 16px; }
+.nb-flow-progress {
+  height: 3px;
+  background: var(--nb-border);
+  position: relative;
+  overflow: hidden;
+}
+.nb-flow-progress__fill {
+  position: absolute; inset: 0;
+  background: var(--nb-blue);
+  transform-origin: left;
+  transition: transform 400ms var(--nb-ease);
+}
+
+/* Step-list row (icon + label + Start ›) */
+.nb-step-row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 4px;
+  border-bottom: 1px solid var(--nb-border);
+}
+.nb-step-row__icon { color: var(--nb-text); font-size: 20px; }
+.nb-step-row__label { font-weight: 600; color: var(--nb-text); flex: 1; }
+.nb-step-row__cta { color: var(--nb-link); font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
+.nb-step-row--locked { color: var(--nb-text-muted); }
+.nb-step-row--locked .nb-step-row__icon,
+.nb-step-row--locked .nb-step-row__label { color: var(--nb-text-muted); }
+.nb-step-row--done { color: var(--nb-green); }
+.nb-step-row--done .nb-step-row__cta::before { content: '✓'; color: var(--nb-green); }
+
+/* Trust / info banner (blue-tinted strip with icon) */
+.nb-info-banner {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--nb-blue-info-bg);
+  color: var(--nb-blue);
+  padding: 12px 16px;
+  font-size: 14px; font-weight: 500;
+}
+
+/* Info tip (lightbulb + paragraph with bolded inline callouts) */
+.nb-info-tip {
+  display: flex; align-items: flex-start; gap: 10px;
+  color: var(--nb-text-warm);
+  font-size: 14px; line-height: 20px;
+}
+.nb-info-tip__icon { flex: 0 0 auto; color: var(--nb-green); }
+.nb-info-tip strong { font-weight: 700; color: var(--nb-text); }
+
+/* Example / testimonial card */
+.nb-testimonial {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--nb-white);
+  border: 1px solid var(--nb-border);
+  border-radius: var(--nb-r-md);
+  padding: 14px 16px;
+}
+.nb-testimonial__avatar { width: 36px; height: 36px; border-radius: 50%; flex: 0 0 36px; background: var(--nb-surface-hover); }
+.nb-testimonial__body { flex: 1; }
+.nb-testimonial__head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.nb-testimonial__name { font-weight: 600; }
+.nb-testimonial__tag { font-size: 10px; letter-spacing: 0.05em; padding: 2px 6px; background: var(--nb-surface-hover); border-radius: var(--nb-r-xs); color: var(--nb-text-muted); font-weight: 700; }
+.nb-testimonial__quote { font-size: 14px; line-height: 20px; color: var(--nb-text); }

@@ -1,0 +1,77 @@
+/* ============================================================
+   Standalone prototype page ("the experience").
+   Loaded only by prototype.html, on top of neighbor.css.
+   The prototype is the whole page here, so the phone gets the
+   centre of the stage and the presenter notes sit beside it.
+   ============================================================ */
+
+.solo-bar {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px 24px;
+  background: var(--nb-white);
+  border-bottom: 1px solid var(--nb-border);
+}
+.solo-brand {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--nb-blue); text-decoration: none;
+  font-size: 17px; font-weight: 500; letter-spacing: -0.2px;
+}
+.solo-brand b { font-weight: 700; }
+.solo-back {
+  display: inline-flex; align-items: center; gap: 7px;
+  color: var(--nb-link); text-decoration: none;
+  font-size: 14px; font-weight: 500;
+  border: 1px solid var(--nb-border-nav); border-radius: var(--nb-r-full);
+  padding: 8px 16px;
+  transition: background 150ms var(--nb-ease);
+}
+.solo-back:hover { background: var(--nb-surface-hover); }
+
+.solo { max-width: 1120px; margin: 0 auto; padding: 44px 24px 0; }
+.solo-h1 {
+  font-family: var(--nb-font-display); font-weight: 400;
+  font-size: clamp(27px, 3.4vw, 38px); line-height: 1.18; letter-spacing: -0.028em;
+  color: var(--nb-text-warm); text-wrap: balance; max-width: 22ch; margin-bottom: 14px;
+}
+.solo-lede {
+  font-size: 16px; line-height: 25px; color: var(--nb-text-muted);
+  max-width: 64ch; margin-bottom: 34px;
+}
+.solo-lede b { color: var(--nb-text); font-weight: 600; }
+
+/* The phone block is styled by neighbor.css (.proto / .phone-col / .notes).
+   Here the prototype is the whole page, so centre the phone-plus-notes pair
+   instead of letting the notes column stretch across the full width. */
+.solo #proto-mount .proto {
+  margin-top: 0;
+  grid-template-columns: auto minmax(320px, 390px);
+  justify-content: center;
+  gap: 54px;
+}
+@media (max-width: 1080px) {
+  .solo #proto-mount .proto { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .solo #proto-mount .notes { max-width: 46ch; }
+}
+
+.solo-foot {
+  max-width: 1120px; margin: 72px auto 0; padding: 22px 24px 40px;
+  border-top: 1px solid var(--nb-border);
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  font-size: 13px; line-height: 20px; color: var(--nb-text-faint);
+}
+.solo-foot a { color: var(--nb-link); text-decoration: none; font-weight: 500; }
+.solo-foot a:hover { text-decoration: underline; }
+
+.solo-back__short { display: none; }
+
+@media (max-width: 640px) {
+  .solo-bar { padding: 11px 16px; }
+  .solo-brand { font-size: 15px; }
+  .solo-back { font-size: 13px; padding: 7px 14px; }
+  .solo-back__long { display: none; }
+  .solo-back__short { display: inline; }
+  .solo { padding: 30px 16px 0; }
+  .solo-h1 { font-size: 26px; }
+  .solo-lede { font-size: 15px; line-height: 23px; margin-bottom: 26px; }
+}

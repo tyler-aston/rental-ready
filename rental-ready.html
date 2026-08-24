@@ -1,0 +1,1348 @@
+<title>Neighbor Rental-Ready</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Petrona:wght@400;500;700&amp;display=swap">
+<style>
+/*__TOKENS__*/
+/* ============================================================
+   Neighbor.com design tokens — v2 (comprehensive)
+   Extracted 2026-08-23 from https://www.neighbor.com across:
+     - / (homepage, desktop + mobile)
+     - /rv-storage-near-me (category landing)
+     - /search (results + map, real listing cards)
+     - /auth/register (form pattern)
+     - /host (marketing landing, full type scale)
+   Plus historical app screenshots from sidehustlenation.com
+   (listing flow, smart pricing, vouches).
+
+   Neighbor uses Tailwind with a custom theme. Their color names:
+     - Primary blue = `blue-40` / `blue-50` (hover)
+     - Accents are named after Karate Kid characters (miyagi,
+       matthew, etc.) — no joke.
+     - Text uses two near-blacks: #232323 (cool) and #373A36 (warm)
+   ============================================================ */
+
+:root {
+  /* --- Brand ------------------------------------------------- */
+  --nb-blue: #1767FF;             /* wordmark, primary CTAs, map pins (blue-40) */
+  --nb-blue-hover: #0F57E0;       /* darker hover state (blue-50 approximation) */
+  --nb-blue-search: #0079E1;      /* search submit + "OPEN" app pill */
+  --nb-blue-tint: #BADFEE;        /* star rating pastel */
+  --nb-blue-info-bg: #EFF5F8;     /* trust-banner background (light blue tint) */
+  --nb-link: #0067C0;             /* inline text-link color */
+
+  /* --- Green (dollar amounts + promos) — CRITICAL for pricing */
+  --nb-green: #00573F;            /* price text — active/discounted amount */
+  --nb-green-tint: #EAF4DD;       /* promo pill background */
+
+  /* --- Cream (Top Host / trust badges) --------------------- */
+  --nb-cream: #FFF8DE;            /* Top Host badge bg (yellow-10) */
+
+  /* --- Star rating ----------------------------------------- */
+  --nb-star: #FFB800;             /* filled rating stars are amber, not blue */
+
+  /* --- Neutrals -------------------------------------------- */
+  --nb-text:       #232323;       /* cool near-black (gray-80) */
+  --nb-text-warm:  #373A36;       /* warm near-black — used on marketing/hosts pages */
+  --nb-text-muted: #63666A;       /* icons, placeholder, meta (gray-60) */
+  --nb-text-faint: #888B8D;       /* strikethrough was-price color (gray-50) */
+  --nb-border:     #EBEBEB;       /* hairline borders (gray-30) */
+  --nb-border-nav: #EBECF0;       /* nav-outline button border (slightly cooler) */
+  --nb-surface-hover: #F5F5F5;    /* hover fill on ghost buttons (gray-20) */
+  --nb-white:    #FEFEFE;         /* Neighbor's "white" — not pure #FFF */
+  --nb-page:     #FFFFFF;
+
+  /* --- Type -------------------------------------------------- */
+  /* GT-Ultra first: Neighbor reviewers with the brand font installed see the
+     real thing. Petrona (Google Fonts) is the CSP-safe stand-in; Georgia is
+     Neighbor's own documented fallback. */
+  --nb-font-display: 'GT-Ultra', 'Petrona', Georgia, 'Times New Roman', serif;
+  --nb-font-body:    'Inter', Roboto, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Type scale — captured from real elements */
+  /* Hero (only place GT-Ultra is bold; every other serif heading is 400) */
+  --nb-hero-size: 64px;   --nb-hero-lh: 76.8px;  --nb-hero-ls: -1.792px;  --nb-hero-weight: 700;
+
+  /* Section H2 large (GT-Ultra 400, marketing) */
+  --nb-h2-lg-size: 44px;  --nb-h2-lg-lh: 52.8px; --nb-h2-lg-ls: -1.232px;
+
+  /* Section H2 medium (GT-Ultra 400, marketing) */
+  --nb-h2-md-size: 40px;  --nb-h2-md-lh: 48px;   --nb-h2-md-ls: -1.12px;
+
+  /* Subhead H2 (Inter 400, marketing) */
+  --nb-h2-sub-size: 26px; --nb-h2-sub-lh: 35px;  --nb-h2-sub-ls: -0.26px;
+
+  /* Ambient / section H3 (Inter) */
+  --nb-h3-size: 22px;     --nb-h3-lh: 30px;      --nb-h3-weight: 500;
+
+  --nb-body-size: 16px;   --nb-body-lh: 24px;
+  --nb-small-size: 14px;  --nb-small-lh: 20px;
+  --nb-micro-size: 12px;  --nb-micro-lh: 16px;
+
+  /* --- Radii ------------------------------------------------- */
+  --nb-r-xs:    4px;      /* promo pill (small) */
+  --nb-r-sm:    8px;      /* Top Host badge */
+  --nb-r-md:    12px;     /* buttons (ghost/nav), cards, dropdowns */
+  --nb-r-lg:    16px;     /* booking panel, larger cards */
+  --nb-r-chip:  30px;     /* filter chips (outlined) */
+  --nb-r-pill:  50px;     /* filled primary CTA */
+  --nb-r-full:  9999px;   /* circular buttons, map pins, mobile search */
+
+  /* --- Elevation / motion ---------------------------------- */
+  --nb-shadow-pin:  0 1.2px 3.7px rgba(0, 0, 0, 0.20);
+  --nb-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --nb-shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --nb-shadow-nav:  0 1px 0 rgba(0, 0, 0, 0.04);
+  --nb-ease:        cubic-bezier(0.2, 0, 0, 1);
+}
+
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+html { font-size: 16px; }
+body {
+  font-family: var(--nb-font-body);
+  color: var(--nb-text);
+  background: var(--nb-page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Hero (bold serif, only used on H1s) */
+.nb-hero, h1.nb-hero {
+  font-family: var(--nb-font-display);
+  font-weight: var(--nb-hero-weight);
+  font-size: var(--nb-hero-size);
+  line-height: var(--nb-hero-lh);
+  letter-spacing: var(--nb-hero-ls);
+  color: var(--nb-text-warm);
+}
+/* Section heading — regular-weight serif (this is Neighbor's editorial signature) */
+.nb-h2-lg { font-family: var(--nb-font-display); font-weight: 400; font-size: var(--nb-h2-lg-size); line-height: var(--nb-h2-lg-lh); letter-spacing: var(--nb-h2-lg-ls); color: var(--nb-text-warm); }
+.nb-h2-md { font-family: var(--nb-font-display); font-weight: 400; font-size: var(--nb-h2-md-size); line-height: var(--nb-h2-md-lh); letter-spacing: var(--nb-h2-md-ls); color: var(--nb-text-warm); }
+/* Subhead in body font */
+.nb-subhead { font-family: var(--nb-font-body); font-weight: 400; font-size: var(--nb-h2-sub-size); line-height: var(--nb-h2-sub-lh); letter-spacing: var(--nb-h2-sub-ls); color: var(--nb-text-warm); }
+
+a.nb-link { color: var(--nb-link); text-decoration: none; }
+a.nb-link:hover { text-decoration: underline; }
+
+/* ============================================================
+   Component recipes — copy any of these to start a screen.
+   All classes prefixed `nb-` to avoid Tailwind collisions.
+   ============================================================ */
+
+/* --- Buttons --------------------------------------------- */
+
+/* Primary CTA (filled pill) — marketing / conversion surfaces */
+.nb-btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--nb-blue);
+  color: var(--nb-white);
+  border: none;
+  border-radius: var(--nb-r-pill);
+  padding: 10px 24px;                 /* marketing padding */
+  font-family: var(--nb-font-body);
+  font-size: 18px;
+  font-weight: 500;                   /* marketing CTAs use 500 */
+  cursor: pointer;
+  transition: transform 150ms var(--nb-ease), background 150ms var(--nb-ease);
+}
+.nb-btn-primary:hover { background: var(--nb-blue-hover); }
+.nb-btn-primary:active { transform: scale(0.98); }
+
+/* Primary — full width (form / conversion) */
+.nb-btn-primary--block {
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Secondary — outlined pill button */
+.nb-btn-secondary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: transparent;
+  color: var(--nb-text-warm);
+  border: 1px solid var(--nb-border-nav);
+  border-radius: var(--nb-r-pill);
+  padding: 14px 24px;
+  font-family: var(--nb-font-body);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 150ms var(--nb-ease);
+}
+.nb-btn-secondary:hover { background: var(--nb-surface-hover); }
+
+/* Nav-outline (12px radius, not pill) — the "Become a host" style */
+.nb-btn-nav-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent;
+  color: var(--nb-text-warm);
+  border: 1px solid var(--nb-border-nav);
+  border-radius: var(--nb-r-md);
+  padding: 14px 24px;
+  font-family: var(--nb-font-body);
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+/* Ghost / nav link — transparent-until-hover reveals border */
+.nb-btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent;
+  color: var(--nb-text);
+  border: 1px solid transparent;
+  border-radius: var(--nb-r-md);
+  padding: 12px 16px;
+  font-family: var(--nb-font-body);
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: border-color 150ms var(--nb-ease);
+}
+.nb-btn-ghost:hover { border-color: var(--nb-border); }
+
+/* Text-only "Skip for now →" style link */
+.nb-btn-text {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent; border: none; padding: 8px 4px;
+  color: var(--nb-link); font-weight: 500; cursor: pointer;
+}
+
+/* Circular search / icon action */
+.nb-btn-icon {
+  width: 60px; height: 60px;
+  border-radius: var(--nb-r-full);
+  background: var(--nb-blue-search);
+  color: var(--nb-white);
+  border: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* --- Chips (filter row / category picker) ---------------- */
+
+.nb-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent;
+  color: var(--nb-text-warm);
+  border: 1px solid var(--nb-border);
+  border-radius: var(--nb-r-chip);
+  padding: 6px 12px;
+  font-size: 14px; font-weight: 400;
+  cursor: pointer;
+  transition: border-color 150ms var(--nb-ease), background 150ms var(--nb-ease);
+}
+.nb-chip:hover { border-color: var(--nb-text-warm); }
+.nb-chip--active {
+  background: rgba(23, 103, 255, 0.08);
+  border-color: var(--nb-blue);
+  color: var(--nb-blue);
+}
+
+/* --- Cards ----------------------------------------------- */
+
+/* Generic card (category tile, offset dashboard tile) */
+.nb-card {
+  background: var(--nb-white);
+  border: 1px solid var(--nb-border);
+  border-radius: var(--nb-r-md);
+  padding: 20px;
+  transition: box-shadow 150ms var(--nb-ease), transform 150ms var(--nb-ease);
+}
+.nb-card:hover { box-shadow: var(--nb-shadow-lift); transform: translateY(-1px); }
+
+/* Radio-card (selected has blue accent, unselected outline) */
+.nb-radio-card {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--nb-white);
+  border: 1px solid var(--nb-border);
+  border-radius: var(--nb-r-md);
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: border-color 150ms var(--nb-ease), box-shadow 150ms var(--nb-ease);
+}
+.nb-radio-card--selected {
+  border-color: var(--nb-blue);
+  box-shadow: 0 0 0 1px var(--nb-blue) inset;
+}
+.nb-radio-card__dot {
+  width: 20px; height: 20px; flex: 0 0 20px; border-radius: 50%;
+  border: 2px solid var(--nb-border);
+  margin-top: 2px;
+}
+.nb-radio-card--selected .nb-radio-card__dot {
+  border-color: var(--nb-blue);
+  background: radial-gradient(circle, var(--nb-blue) 0 50%, transparent 55%);
+}
+
+/* Booking / price panel (floating right-side card on listing detail) */
+.nb-price-panel {
+  background: var(--nb-white);
+  border: 1px solid var(--nb-border);
+  border-radius: var(--nb-r-lg);
+  padding: 20px 24px;
+  box-shadow: var(--nb-shadow-card);
+}
+.nb-price-panel__row { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; }
+.nb-price-panel__label { color: var(--nb-text-warm); font-size: 14px; }
+.nb-price-panel__value-was { color: var(--nb-text-faint); text-decoration: line-through; font-size: 14px; margin-right: 8px; }
+.nb-price-panel__value-now { color: var(--nb-green); font-weight: 600; font-size: 16px; }
+.nb-price-panel__total { border-top: 1px solid var(--nb-border); margin-top: 8px; padding-top: 12px; }
+.nb-price-panel__total .nb-price-panel__value-now { font-size: 22px; }
+
+/* --- Badges & pills -------------------------------------- */
+
+/* Top Host / cream badge */
+.nb-badge-top-host {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--nb-cream);
+  color: var(--nb-text-warm);
+  border-radius: var(--nb-r-sm);
+  padding: 5px 8px;
+  font-size: 12px; font-weight: 600;
+}
+
+/* Promo pill (green) */
+.nb-badge-promo {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--nb-green-tint);
+  color: var(--nb-green);
+  border-radius: var(--nb-r-xs);
+  padding: 4px 6px;
+  font-size: 12px; font-weight: 600;
+}
+
+/* Map price pin */
+.nb-price-pin {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--nb-blue);
+  color: var(--nb-white);
+  border-radius: var(--nb-r-full);
+  padding: 6px 12px;
+  font-size: 14px; font-weight: 600;
+  box-shadow: var(--nb-shadow-pin);
+}
+
+/* --- Search bar (desktop 3-segment pill) ----------------- */
+
+.nb-searchbar {
+  display: inline-flex; align-items: center;
+  background: var(--nb-white);
+  border-radius: var(--nb-r-full);
+  padding: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+.nb-searchbar__segment {
+  padding: 10px 20px;
+  display: flex; flex-direction: column;
+  border-right: 1px solid var(--nb-border);
+}
+.nb-searchbar__segment:last-of-type { border-right: none; }
+.nb-searchbar__segment-label { font-size: 12px; font-weight: 600; color: var(--nb-text); }
+.nb-searchbar__segment-value { font-size: 14px; color: var(--nb-text-muted); }
+
+/* --- Nav bar (desktop) ----------------------------------- */
+
+.nb-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 68px; padding: 0 24px;
+  background: var(--nb-white);
+  box-shadow: var(--nb-shadow-nav);
+  position: sticky; top: 0; z-index: 40;
+}
+.nb-nav__brand {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--nb-blue);
+  font-family: var(--nb-font-body);
+  font-weight: 700; font-size: 24px;
+}
+
+/* --- App promo banner (mobile top strip) ----------------- */
+
+.nb-app-promo {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  background: var(--nb-white);
+  border-bottom: 1px solid var(--nb-border);
+}
+.nb-app-promo__icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--nb-blue);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--nb-white);
+}
+.nb-app-promo__cta {
+  margin-left: auto; padding: 8px 18px;
+  border-radius: var(--nb-r-full);
+  background: var(--nb-blue-search);
+  color: var(--nb-white);
+  font-size: 14px; font-weight: 700; border: none; cursor: pointer;
+}
+
+/* --- Flow / setup patterns (List-your-space UX) ---------- */
+
+/* Flow header — title with blue progress bar underneath */
+.nb-flow-header {
+  padding: 16px 20px 0;
+  border-bottom: 1px solid var(--nb-border);
+  text-align: center;
+}
+.nb-flow-header__title { font-size: 16px; font-weight: 600; color: var(--nb-text); padding-bottom: 16px; }
+.nb-flow-progress {
+  height: 3px;
+  background: var(--nb-border);
+  position: relative;
+  overflow: hidden;
+}
+.nb-flow-progress__fill {
+  position: absolute; inset: 0;
+  background: var(--nb-blue);
+  transform-origin: left;
+  transition: transform 400ms var(--nb-ease);
+}
+
+/* Step-list row (icon + label + Start ›) */
+.nb-step-row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 4px;
+  border-bottom: 1px solid var(--nb-border);
+}
+.nb-step-row__icon { color: var(--nb-text); font-size: 20px; }
+.nb-step-row__label { font-weight: 600; color: var(--nb-text); flex: 1; }
+.nb-step-row__cta { color: var(--nb-link); font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
+.nb-step-row--locked { color: var(--nb-text-muted); }
+.nb-step-row--locked .nb-step-row__icon,
+.nb-step-row--locked .nb-step-row__label { color: var(--nb-text-muted); }
+.nb-step-row--done { color: var(--nb-green); }
+.nb-step-row--done .nb-step-row__cta::before { content: '✓'; color: var(--nb-green); }
+
+/* Trust / info banner (blue-tinted strip with icon) */
+.nb-info-banner {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--nb-blue-info-bg);
+  color: var(--nb-blue);
+  padding: 12px 16px;
+  font-size: 14px; font-weight: 500;
+}
+
+/* Info tip (lightbulb + paragraph with bolded inline callouts) */
+.nb-info-tip {
+  display: flex; align-items: flex-start; gap: 10px;
+  color: var(--nb-text-warm);
+  font-size: 14px; line-height: 20px;
+}
+.nb-info-tip__icon { flex: 0 0 auto; color: var(--nb-green); }
+.nb-info-tip strong { font-weight: 700; color: var(--nb-text); }
+
+/* Example / testimonial card */
+.nb-testimonial {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--nb-white);
+  border: 1px solid var(--nb-border);
+  border-radius: var(--nb-r-md);
+  padding: 14px 16px;
+}
+.nb-testimonial__avatar { width: 36px; height: 36px; border-radius: 50%; flex: 0 0 36px; background: var(--nb-surface-hover); }
+.nb-testimonial__body { flex: 1; }
+.nb-testimonial__head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.nb-testimonial__name { font-weight: 600; }
+.nb-testimonial__tag { font-size: 10px; letter-spacing: 0.05em; padding: 2px 6px; background: var(--nb-surface-hover); border-radius: var(--nb-r-xs); color: var(--nb-text-muted); font-weight: 700; }
+.nb-testimonial__quote { font-size: 14px; line-height: 20px; color: var(--nb-text); }
+
+/* ============================================================
+   Deliverable chrome — Neighbor Rental-Ready take-home
+   Single-theme by design: this page simulates neighbor.com's
+   light UI, so it paints its own white ground everywhere.
+   (Accent naming honors Neighbor's own Karate Kid theme vars:
+   --accent-miyagi would be proud.)
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; }
+html { scroll-behavior: smooth; }
+body { background: #FFFFFF; }
+
+.wrap { display: grid; grid-template-columns: 216px minmax(0, 1fr); max-width: 1200px; margin: 0 auto; padding: 0 24px; gap: 40px; }
+main { min-width: 0; padding-bottom: 96px; }
+
+/* --- Left rail (numbered = talk order) -------------------- */
+.rail { position: sticky; top: 0; align-self: start; height: 100vh; padding: 40px 0 24px; display: flex; flex-direction: column; }
+.rail__brand { display: flex; align-items: center; gap: 7px; color: var(--nb-blue); font-weight: 700; font-size: 19px; letter-spacing: -0.2px; margin-bottom: 6px; }
+.rail__sub { font-size: 12px; line-height: 16px; color: var(--nb-text-muted); margin-bottom: 28px; }
+.rail__nav { display: flex; flex-direction: column; gap: 2px; }
+.rail__link { display: flex; align-items: baseline; gap: 10px; padding: 8px 10px; border-radius: var(--nb-r-md); color: var(--nb-text-muted); text-decoration: none; font-size: 14px; line-height: 20px; border: 1px solid transparent; transition: color 150ms var(--nb-ease), border-color 150ms var(--nb-ease); }
+.rail__link:hover { border-color: var(--nb-border); color: var(--nb-text); }
+.rail__link.on { color: var(--nb-text); border-color: var(--nb-border); background: var(--nb-white); }
+.rail__num { font-size: 11px; font-weight: 600; color: var(--nb-blue); font-variant-numeric: tabular-nums; width: 12px; flex: 0 0 12px; }
+.rail__foot { margin-top: auto; font-size: 12px; line-height: 17px; color: var(--nb-text-faint); }
+
+/* Mobile top nav (replaces rail) */
+.topnav { display: none; position: sticky; top: 0; z-index: 50; background: #FFFFFF; border-bottom: 1px solid var(--nb-border); padding: 10px 16px; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.topnav a { flex: 0 0 auto; text-decoration: none; }
+
+/* --- Masthead --------------------------------------------- */
+.masthead { padding: 56px 0 8px; }
+.kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nb-text-muted); margin-bottom: 20px; }
+.kicker b { color: var(--nb-blue); font-weight: 700; }
+.hero-h1 { font-family: var(--nb-font-display); font-weight: 700; font-size: clamp(36px, 5.2vw, 58px); line-height: 1.14; letter-spacing: -0.028em; color: var(--nb-text-warm); text-wrap: balance; max-width: 21ch; margin-bottom: 22px; }
+.hero-sub { font-size: 19px; line-height: 29px; color: var(--nb-text-warm); max-width: 62ch; }
+.brief { margin-top: 26px; display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 21px; color: var(--nb-text-muted); max-width: 70ch; padding: 14px 16px; background: var(--nb-blue-info-bg); border-radius: var(--nb-r-md); }
+.brief b { color: var(--nb-text); font-weight: 600; }
+
+/* --- Sections --------------------------------------------- */
+section { padding-top: 72px; }
+.eyebrow { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nb-text-muted); margin-bottom: 12px; }
+.eyebrow::before { counter-reset: none; content: attr(data-n); color: var(--nb-blue); font-weight: 700; }
+.sec-h2 { font-family: var(--nb-font-display); font-weight: 400; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.2; letter-spacing: -0.028em; color: var(--nb-text-warm); text-wrap: balance; margin-bottom: 14px; }
+.sec-lede { font-size: 16px; line-height: 25px; color: var(--nb-text-muted); max-width: 66ch; margin-bottom: 32px; }
+.sec-lede b, .prose b { color: var(--nb-text); font-weight: 600; }
+.prose { font-size: 16px; line-height: 25px; color: var(--nb-text); max-width: 66ch; }
+.prose + .prose { margin-top: 14px; }
+
+/* --- Advantage cards -------------------------------------- */
+.adv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 8px 0 36px; }
+.adv { background: var(--nb-white); border: 1px solid var(--nb-border); border-radius: var(--nb-r-lg); padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+.adv__icon { width: 40px; height: 40px; border-radius: 10px; background: var(--nb-blue-info-bg); color: var(--nb-blue); display: flex; align-items: center; justify-content: center; }
+.adv h3 { font-family: var(--nb-font-display); font-weight: 400; font-size: 21px; line-height: 27px; letter-spacing: -0.02em; color: var(--nb-text-warm); }
+.adv p { font-size: 14px; line-height: 21px; color: var(--nb-text-muted); }
+.adv p b { color: var(--nb-text); font-weight: 600; }
+
+/* --- Framing compare (bad vs good) ------------------------ */
+.frame-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 8px 0 12px; }
+.frame { border-radius: var(--nb-r-lg); padding: 22px; border: 1px solid var(--nb-border); background: var(--nb-white); }
+.frame--good { background: var(--nb-green-tint); border-color: transparent; }
+.frame__tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+.frame--bad .frame__tag { color: var(--nb-text-faint); }
+.frame--good .frame__tag { color: var(--nb-green); }
+.frame h3 { font-family: var(--nb-font-display); font-weight: 400; font-size: 24px; line-height: 30px; letter-spacing: -0.02em; margin-bottom: 10px; }
+.frame--bad h3 { color: var(--nb-text-faint); text-decoration: line-through; text-decoration-thickness: 1px; }
+.frame--good h3 { color: var(--nb-green); }
+.frame p { font-size: 14px; line-height: 21px; color: var(--nb-text-muted); }
+.frame--good p { color: #2E4A33; }
+.frame p b { font-weight: 700; color: inherit; }
+
+/* Shared tip + testimonial rhythm inside sections */
+.tipbox { margin: 24px 0; max-width: 70ch; }
+
+/* --- Journey map ------------------------------------------ */
+.jm-scroll { overflow-x: auto; padding-bottom: 8px; }
+.jm { display: grid; grid-template-columns: 118px repeat(4, minmax(180px, 1fr)); gap: 10px; min-width: 880px; }
+.jm__stage { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nb-text-muted); padding: 6px 4px 10px; border-bottom: 1px solid var(--nb-border); }
+.jm__actor { font-size: 13px; line-height: 18px; font-weight: 600; color: var(--nb-text); padding-top: 14px; }
+.jm__actor small { display: block; font-weight: 400; color: var(--nb-text-faint); font-size: 12px; margin-top: 2px; }
+.jm__cell { padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.thumb { display: flex; gap: 10px; align-items: center; background: var(--nb-white); border: 1px solid var(--nb-border); border-radius: var(--nb-r-md); padding: 9px 11px; text-align: left; cursor: default; font-family: var(--nb-font-body); transition: box-shadow 150ms var(--nb-ease), transform 150ms var(--nb-ease), border-color 150ms var(--nb-ease); }
+.thumb__mini { flex: 0 0 34px; width: 34px; height: 46px; border-radius: 5px; border: 1px solid var(--nb-border); background: #FFFFFF; padding: 4px 4px; display: flex; flex-direction: column; gap: 3px; overflow: hidden; }
+.thumb__mini i { display: block; height: 4px; border-radius: 2px; background: var(--nb-border); }
+.thumb__mini i.b { background: var(--nb-blue); } .thumb__mini i.g { background: var(--nb-green); }
+.thumb__mini i.half { width: 60%; }
+.thumb__mini--dark { background: #26292E; border-color: #26292E; }
+.thumb__mini--dark i { background: #4A4E55; } .thumb__mini--dark i.w { background: #E9EAEC; }
+.thumb__txt { font-size: 12.5px; line-height: 17px; color: var(--nb-text); font-weight: 500; }
+.thumb__txt small { display: block; font-weight: 400; color: var(--nb-text-faint); font-size: 11px; margin-top: 1px; }
+button.thumb { cursor: pointer; }
+button.thumb:hover { box-shadow: var(--nb-shadow-lift); transform: translateY(-1px); }
+.thumb--built { border-color: var(--nb-blue); box-shadow: 0 0 0 1px var(--nb-blue) inset; }
+.thumb__chip { margin-left: auto; flex: 0 0 auto; font-size: 11px; font-weight: 700; color: var(--nb-blue); background: rgba(23,103,255,0.08); border-radius: var(--nb-r-full); padding: 2px 8px; font-variant-numeric: tabular-nums; }
+.jm-key { display: flex; gap: 18px; align-items: center; margin-top: 14px; font-size: 13px; color: var(--nb-text-muted); flex-wrap: wrap; }
+.jm-key span { display: inline-flex; align-items: center; gap: 7px; }
+.jm-key i { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--nb-border); }
+.jm-key i.built { border-color: var(--nb-blue); box-shadow: 0 0 0 1px var(--nb-blue) inset; }
+
+/* --- Prototype -------------------------------------------- */
+.proto { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 40px; align-items: start; margin-top: 8px; }
+.phone-col { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.actor-chip { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--nb-text); background: var(--nb-white); border: 1px solid var(--nb-border); border-radius: var(--nb-r-full); padding: 7px 14px; }
+.actor-chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--nb-blue); }
+.actor-chip.host i { background: var(--nb-green); }
+.phone { position: relative; width: 375px; height: 726px; background: #FFFFFF; border: 11px solid #1B1B1F; border-radius: 52px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.16); }
+.notch { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 108px; height: 28px; background: #1B1B1F; border-radius: 16px; z-index: 30; }
+.scr { position: absolute; inset: 0; background: #FFFFFF; opacity: 0; transform: translateX(14px); pointer-events: none; transition: opacity 260ms var(--nb-ease), transform 260ms var(--nb-ease); overflow-y: auto; display: flex; flex-direction: column; }
+.scr.on { opacity: 1; transform: none; pointer-events: auto; }
+.sbar { flex: 0 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 16px 26px 6px; font-size: 14px; font-weight: 600; color: var(--nb-text); }
+.sbar svg { display: block; }
+.scr-body { padding: 8px 20px 24px; display: flex; flex-direction: column; flex: 1 1 auto; }
+.scr-h1 { font-size: 23px; line-height: 29px; font-weight: 700; color: var(--nb-text); letter-spacing: -0.01em; margin: 14px 0 6px; }
+.scr-sub { font-size: 14px; line-height: 20px; color: var(--nb-text-muted); margin-bottom: 14px; }
+.scr .nb-flow-header { margin: 0 -20px; }
+.tap-hint { animation: taphint 2.2s ease-in-out infinite; }
+@keyframes taphint { 0%,100% { box-shadow: 0 0 0 0 rgba(23,103,255,0); } 50% { box-shadow: 0 0 0 5px rgba(23,103,255,0.12); } }
+
+/* Lock screen */
+.scr--lock { background: linear-gradient(168deg, #0E1B33 0%, #14264A 46%, #0F1E3C 100%); color: #FFFFFF; }
+.lock-date { text-align: center; margin-top: 74px; font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.82); }
+.lock-time { text-align: center; font-size: 74px; line-height: 1.04; font-weight: 300; letter-spacing: -0.01em; color: #FFFFFF; font-variant-numeric: tabular-nums; }
+.push { margin: 42px 14px 0; background: rgba(250,250,252,0.92); border-radius: 22px; padding: 13px 14px; display: flex; gap: 11px; align-items: flex-start; color: var(--nb-text); text-align: left; border: none; cursor: pointer; font-family: var(--nb-font-body); width: calc(100% - 28px); }
+.push:active { transform: scale(0.98); }
+.push__icon { flex: 0 0 38px; width: 38px; height: 38px; border-radius: 9px; background: var(--nb-blue); color: #FFF; display: flex; align-items: center; justify-content: center; }
+.push__meta { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--nb-text-muted); margin-bottom: 2px; }
+.push__title { display: block; font-size: 14px; line-height: 19px; font-weight: 600; }
+.push__body { display: block; font-size: 13.5px; line-height: 18px; color: #3C3F44; }
+.lock-foot { margin-top: auto; padding-bottom: 14px; display: flex; flex-direction: column; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); font-size: 12px; }
+.homebar { width: 130px; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.85); }
+
+/* Offset math card (activation) */
+.offset-card { background: var(--nb-green-tint); border-radius: var(--nb-r-md); padding: 14px 16px; margin-top: 16px; font-size: 14px; line-height: 21px; color: #2E4A33; }
+.offset-card b { color: var(--nb-green); font-weight: 700; }
+.was { color: var(--nb-text-faint); text-decoration: line-through; }
+
+/* Day pills */
+.days { display: flex; gap: 6px; margin: 10px 0 4px; }
+.day { flex: 1; padding: 9px 0; text-align: center; font-size: 13px; font-weight: 600; border-radius: var(--nb-r-md); border: 1px solid var(--nb-border); background: #FFF; color: var(--nb-text-muted); cursor: pointer; font-family: var(--nb-font-body); transition: border-color 150ms var(--nb-ease), background 150ms var(--nb-ease), color 150ms var(--nb-ease); }
+.day.on { background: rgba(23,103,255,0.08); border-color: var(--nb-blue); color: var(--nb-blue); }
+.field-label { font-size: 14px; font-weight: 600; color: var(--nb-text); margin-top: 18px; }
+
+/* Listing-live splash + incoming banner */
+.splash { text-align: center; padding-top: 46px; }
+.bigcheck { width: 72px; height: 72px; border-radius: 50%; background: var(--nb-green-tint); color: var(--nb-green); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+.inbanner { position: absolute; top: 48px; left: 12px; right: 12px; background: #FFFFFF; border: 1px solid var(--nb-border); border-radius: 18px; box-shadow: 0 14px 34px rgba(0,0,0,0.18); padding: 11px 13px; display: flex; gap: 10px; align-items: flex-start; transform: translateY(-130px); transition: transform 380ms var(--nb-ease); cursor: pointer; z-index: 20; text-align: left; font-family: var(--nb-font-body); width: calc(100% - 24px); }
+.inbanner.in { transform: none; }
+
+/* Booking request */
+.renter-row { display: flex; align-items: center; gap: 12px; margin: 4px 0 14px; }
+.avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--nb-blue-info-bg); color: var(--nb-blue); font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 44px; }
+.avatar--sm { width: 36px; height: 36px; flex-basis: 36px; font-size: 13px; }
+.renter-row__meta { font-size: 13px; line-height: 18px; color: var(--nb-text-muted); }
+.renter-row__meta b { display: block; font-size: 15px; color: var(--nb-text); font-weight: 600; }
+.trip-card { border: 1px solid var(--nb-border); border-radius: var(--nb-r-md); padding: 13px 15px; font-size: 14px; line-height: 21px; color: var(--nb-text); margin-bottom: 14px; }
+.trip-card b { font-weight: 600; }
+.trip-card small { display: block; color: var(--nb-text-muted); font-size: 13px; margin-top: 3px; }
+.covers { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; line-height: 19px; color: var(--nb-text-muted); margin: 12px 2px 16px; }
+.covers b { color: var(--nb-green); font-weight: 700; }
+.price-note { font-size: 12px; color: var(--nb-text-faint); text-align: center; margin-top: 10px; }
+
+/* Rental-ready flip */
+.flip-stage { text-align: center; margin: 26px 0 8px; perspective: 700px; }
+.flip { position: relative; display: inline-block; min-width: 250px; height: 92px; }
+.flip__face { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 2px; backface-visibility: hidden; transition: transform 700ms var(--nb-ease) 600ms; }
+.flip__label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nb-text-muted); }
+.flip__amt { font-family: var(--nb-font-display); font-weight: 400; font-size: 52px; line-height: 1.05; letter-spacing: -0.02em; color: var(--nb-text-faint); font-variant-numeric: tabular-nums; }
+.flip__face--after { transform: rotateX(180deg); }
+.flip__face--after .flip__amt { color: var(--nb-green); }
+.flip__face--after .flip__label { color: var(--nb-green); }
+.on .flip.go .flip__face--before { transform: rotateX(-180deg); }
+.on .flip.go .flip__face--after { transform: rotateX(0); }
+
+/* Consent screen bits */
+.keyart { display: flex; justify-content: center; margin: 10px 0 4px; color: var(--nb-blue); }
+.micro-note { font-size: 12px; line-height: 17px; color: var(--nb-text-faint); text-align: center; margin-top: 10px; }
+.scr-ctas { margin-top: auto; padding-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.done-strip { background: var(--nb-green-tint); color: var(--nb-green); font-weight: 600; font-size: 14px; border-radius: var(--nb-r-md); padding: 12px 16px; text-align: center; }
+
+/* Controls + notes */
+.controls { display: flex; align-items: center; gap: 14px; }
+.ctrl-btn { border: 1px solid var(--nb-border); background: var(--nb-white); border-radius: var(--nb-r-full); padding: 8px 16px; font-family: var(--nb-font-body); font-size: 13px; font-weight: 500; color: var(--nb-text); cursor: pointer; transition: background 150ms var(--nb-ease); }
+.ctrl-btn:hover { background: var(--nb-surface-hover); }
+.dots { display: flex; gap: 7px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--nb-border); border: none; padding: 0; cursor: pointer; transition: background 150ms var(--nb-ease), transform 150ms var(--nb-ease); }
+.dot.on { background: var(--nb-blue); transform: scale(1.25); }
+.notes { position: sticky; top: 40px; }
+.notes__tag { display: inline-flex; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nb-text-muted); background: var(--nb-surface-hover); border-radius: var(--nb-r-xs); padding: 3px 8px; margin-bottom: 14px; }
+.notes__step { font-size: 12px; font-weight: 700; color: var(--nb-blue); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+.notes h3 { font-family: var(--nb-font-display); font-weight: 400; font-size: 24px; line-height: 30px; letter-spacing: -0.02em; color: var(--nb-text-warm); margin-bottom: 10px; }
+.notes p { font-size: 14.5px; line-height: 22px; color: var(--nb-text-muted); max-width: 44ch; }
+.notes p b { color: var(--nb-text); font-weight: 600; }
+.notes__pm { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--nb-border); font-size: 13px; line-height: 19px; color: var(--nb-text-muted); max-width: 44ch; }
+.notes__pm b { color: var(--nb-green); font-weight: 700; }
+.state-line { margin-top: 18px; font-size: 12px; color: var(--nb-text-faint); font-variant-numeric: tabular-nums; }
+
+/* --- Tables (metrics / risks) ----------------------------- */
+.tbl-scroll { overflow-x: auto; margin: 6px 0 26px; }
+table.nbt { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14.5px; line-height: 21px; }
+.nbt th { text-align: left; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--nb-text-muted); padding: 10px 14px; border-bottom: 1px solid var(--nb-border); }
+.nbt td { padding: 12px 14px; border-bottom: 1px solid var(--nb-border); vertical-align: top; color: var(--nb-text); }
+.nbt td:first-child { font-weight: 600; }
+.nbt .num { font-variant-numeric: tabular-nums; }
+.nbt .money { color: var(--nb-green); font-weight: 700; }
+.nbt small { color: var(--nb-text-muted); font-size: 13px; display: block; }
+.phase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px; }
+.phase { border: 1px solid var(--nb-border); border-radius: var(--nb-r-lg); padding: 20px; background: var(--nb-white); }
+.phase__n { font-size: 12px; font-weight: 700; color: var(--nb-blue); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+.phase h3 { font-size: 17px; font-weight: 600; color: var(--nb-text); margin-bottom: 8px; }
+.phase p { font-size: 13.5px; line-height: 20px; color: var(--nb-text-muted); }
+.phase__gate { margin-top: 12px; font-size: 12.5px; line-height: 18px; color: var(--nb-green); font-weight: 600; }
+
+/* --- Talk track ------------------------------------------- */
+.talk { border: 1px solid var(--nb-border); border-radius: var(--nb-r-lg); background: var(--nb-white); padding: 28px 30px; max-width: 74ch; }
+.talk p { font-family: var(--nb-font-display); font-weight: 400; font-size: 21px; line-height: 34px; letter-spacing: -0.012em; color: var(--nb-text-warm); }
+.talk .cue { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; border-radius: 50%; background: rgba(23,103,255,0.1); color: var(--nb-blue); font-family: var(--nb-font-body); font-size: 12px; font-weight: 700; vertical-align: 2px; margin: 0 4px; font-variant-numeric: tabular-nums; }
+.talk__note { margin-top: 16px; font-size: 13px; color: var(--nb-text-faint); font-family: var(--nb-font-body); }
+
+footer.colophon { margin-top: 84px; padding-top: 22px; border-top: 1px solid var(--nb-border); font-size: 13px; line-height: 20px; color: var(--nb-text-faint); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+/* --- A11y + responsive ------------------------------------ */
+:focus-visible { outline: 2px solid var(--nb-blue); outline-offset: 2px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; } html { scroll-behavior: auto; } }
+@media (max-width: 1080px) {
+  .proto { grid-template-columns: 1fr; }
+  .notes { position: static; max-width: 60ch; }
+}
+@media (max-width: 960px) {
+  .wrap { grid-template-columns: 1fr; gap: 0; }
+  .rail { display: none; }
+  .topnav { display: flex; }
+  .adv-grid, .phase-grid { grid-template-columns: 1fr; }
+  .frame-grid { grid-template-columns: 1fr; }
+  .masthead { padding-top: 36px; }
+  section { padding-top: 56px; }
+}
+@media (max-width: 430px) {
+  .phone-scale { transform: scale(0.86); transform-origin: top center; margin-bottom: -100px; }
+}
+
+
+/* --- request-view toggle (prototype) ----------------------- */
+  .v-req { display: none; }
+  .scr.req .v-splash { display: none; }
+  .scr.req .v-req { display: flex; }
+  .inbanner { pointer-events: none; }
+  .inbanner.in { pointer-events: auto; }
+/* --- Cross-link from the walkthrough to the standalone page --- */
+.proto-openline { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: -14px 0 26px; }
+.proto-openline > span { font-size: 13.5px; color: var(--nb-text-faint); }
+.proto-open {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--nb-blue); color: var(--nb-white); text-decoration: none;
+  border-radius: var(--nb-r-full); padding: 10px 20px;
+  font-size: 15px; font-weight: 500;
+  transition: background 150ms var(--nb-ease), transform 150ms var(--nb-ease);
+}
+.proto-open:hover { background: var(--nb-blue-hover); }
+.proto-open:active { transform: scale(0.98); }
+
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 11.2 12 4l9 7.2"/><path d="M5.6 9.8V20h12.8V9.8"/>
+    </symbol>
+    <symbol id="i-sb" viewBox="0 0 54 12" fill="currentColor">
+      <rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="1" width="3" height="11" rx="1"/>
+      <path d="M27 4.5a7.5 7.5 0 0 1 9.4 0l-1.6 1.9a5 5 0 0 0-6.2 0Zm2.6 3a3.6 3.6 0 0 1 4.2 0L31.7 10Z"/>
+      <rect x="41" y="2.5" width="11" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="43" y="4.5" width="6" height="3" rx="0.8"/><rect x="53" y="4.8" width="1.6" height="2.4" rx="0.8"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4.5 12.6 9.6 17.6 19.5 7"/>
+    </symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9.5 18h5M10.2 21h3.6M12 3a6 6 0 0 0-3.4 10.9c.7.5 1 1.3 1.1 2.1h4.6c.1-.8.4-1.6 1.1-2.1A6 6 0 0 0 12 3Z"/>
+    </symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="14.5" r="4.2"/><path d="M11.2 11.6 19.6 3.4M16.4 6.4l2.6 2.6M13.6 9.2l2.2 2.2"/>
+    </symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21s6.6-5.4 6.6-10.4A6.6 6.6 0 0 0 5.4 10.6C5.4 15.6 12 21 12 21Z"/><circle cx="12" cy="10.4" r="2.4"/>
+    </symbol>
+    <symbol id="i-data" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="12" cy="5.4" rx="7.4" ry="2.9"/><path d="M4.6 5.4v13.2c0 1.6 3.3 2.9 7.4 2.9s7.4-1.3 7.4-2.9V5.4M4.6 12c0 1.6 3.3 2.9 7.4 2.9s7.4-1.3 7.4-2.9"/>
+    </symbol>
+    <symbol id="i-receipt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 3h12v18l-2.4-1.6L13.2 21l-2.4-1.6L8.4 21 6 19.4Z"/><path d="M9 8h6M9 12h6"/>
+    </symbol>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 3.6l2.5 5.2 5.7.7-4.2 3.9 1.1 5.6L12 16.2 6.9 19l1.1-5.6-4.2-3.9 5.7-.7Z"/>
+    </symbol>
+    <symbol id="i-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 4h6v6M20 4l-8.4 8.4"/><path d="M18 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V8a1.5 1.5 0 0 1 1.5-1.5H10"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 12h15M13 6l6 6-6 6"/>
+    </symbol>
+  </defs>
+</svg>
+<div class="topnav" aria-label="Sections">
+  <a class="nb-chip" href="#s1">1 · Thesis</a>
+  <a class="nb-chip" href="#s2">2 · Journey</a>
+  <a class="nb-chip" href="#s3">3 · Prototype</a>
+  <a class="nb-chip" href="#s4">4 · Metrics</a>
+  <a class="nb-chip" href="#s5">5 · Risks</a>
+  <a class="nb-chip" href="#s6">6 · Talk track</a>
+</div>
+
+<div class="wrap">
+  <aside class="rail" aria-label="Sections">
+    <div class="rail__brand"><svg width="21" height="21"><use href="#i-house"/></svg>Neighbor</div>
+    <div class="rail__sub">Rental-Ready · PM take-home</div>
+    <nav class="rail__nav">
+      <a class="rail__link" href="#s1"><span class="rail__num">1</span>Thesis</a>
+      <a class="rail__link" href="#s2"><span class="rail__num">2</span>Journey map</a>
+      <a class="rail__link" href="#s3"><span class="rail__num">3</span>Prototype</a>
+      <a class="rail__link" href="#s4"><span class="rail__num">4</span>Metrics &amp; rollout</a>
+      <a class="rail__link" href="#s5"><span class="rail__num">5</span>Risks</a>
+      <a class="rail__link" href="#s6"><span class="rail__num">6</span>Talk track</a>
+    </nav>
+    <div class="rail__foot">Tyler Aston<br>August 2026</div>
+  </aside>
+
+  <main>
+    <header class="masthead">
+      <div class="kicker"><b>Rental-Ready</b> · PM take-home · Tyler Aston · August 2026</div>
+      <h1 class="hero-h1">Neighbor already refers away the bigger half of the transaction.</h1>
+      <p class="hero-sub">Neighbor and RVshare have a live partnership — and it runs in exactly one direction. RVshare sends its owners to Neighbor to find storage. Neighbor sends nobody back, and captures none of the rental economics on a vehicle parked on its own network.</p>
+      <p class="brief"><svg width="16" height="16" style="flex:0 0 16px;margin-top:2px"><use href="#i-receipt"/></svg><span><b>The brief:</b> help renters who store RVs and boats on Neighbor also rent those vehicles out — wireframe the touchpoints across the journey that maximize adoption, and prototype at least one of them. The prototype in section 3 is fully clickable.</span></p>
+    </header>
+
+    <section id="s1">
+      <div class="eyebrow" data-n="01">Thesis</div>
+      <h2 class="sec-h2">Three structural advantages no rental marketplace can copy.</h2>
+      <p class="sec-lede">Peer-to-peer RV and boat rental is a solved demand problem and an unsolved <b>logistics</b> problem. Neighbor happens to own the three hardest pieces already — because of the storage relationship, not despite it.</p>
+
+      <div class="adv-grid">
+        <div class="adv">
+          <div class="adv__icon"><svg width="21" height="21"><use href="#i-pin"/></svg></div>
+          <h3>Neighbor owns the depot.</h3>
+          <p>The unsolved problem in peer-to-peer RV rental is physical handoff: where does a stranger pick up a 32-foot Class&nbsp;A? Neighbor is the only company with a <b>distributed network of vetted physical locations already co-located with the idle asset</b>. The storage space is the rental depot. Outdoorsy cannot build this without becoming Neighbor.</p>
+        </div>
+        <div class="adv">
+          <div class="adv__icon"><svg width="21" height="21"><use href="#i-data"/></svg></div>
+          <h3>Neighbor owns the data.</h3>
+          <p>Vehicle class, length, photos, exact location, verified ID and days-parked are all captured during storage onboarding — Neighbor's RV search already asks for class and length up front. A rental listing that takes ~20 minutes to build on RVshare can arrive <b>~85% pre-filled</b> and be confirmed in 90 seconds.</p>
+        </div>
+        <div class="adv">
+          <div class="adv__icon"><svg width="21" height="21"><use href="#i-receipt"/></svg></div>
+          <h3>Neighbor sends the bill.</h3>
+          <p>Reservations are month-to-month, so every storage renter gets a recurring charge for a vehicle that isn't moving. The most persuasive instant to pitch "make this earn" is <b>the instant someone is billed for its idleness</b>. Neighbor owns that moment. Nobody else is in the room for it.</p>
+        </div>
+      </div>
+
+      <h2 class="sec-h2" style="font-size:clamp(24px,2.8vw,32px)">Sell the offset, not the income.</h2>
+      <div class="frame-grid">
+        <div class="frame frame--bad">
+          <div class="frame__tag">✕ &nbsp;Don't ship</div>
+          <h3>"Earn money renting your RV"</h3>
+          <p>Income framing. Competes head-on with Outdoorsy and RVshare on their turf, and implies effort, an unbounded goal, and a second job. The mental comparison becomes <b>"is this worth becoming an RV-rental operator?"</b> — a high bar most owners will decline.</p>
+        </div>
+        <div class="frame frame--good">
+          <div class="frame__tag">✓ &nbsp;Ship this</div>
+          <h3>"Cancel your storage bill"</h3>
+          <p>Offset framing, native to a relationship Neighbor already has — it's a direct descendant of "Cancel any month." The goal is small, concrete and finite: <b>$185 — one booking clears it.</b> The comparison becomes "do I want this bill to go away?" Loss aversion does the work, and it yields a retention metric no competitor can even report.</p>
+        </div>
+      </div>
+
+      <div class="nb-info-tip tipbox">
+        <svg class="nb-info-tip__icon" width="19" height="19"><use href="#i-bulb"/></svg>
+        <span>This launch makes Neighbor a <strong>three-sided marketplace</strong>: storage host, vehicle owner, vehicle renter. The storage host has strangers arriving at their property — so the host holds veto power, and must be compensated for it. Designing only the vehicle owner's flow produces a feature that cannot launch. <strong>Host consent and a paid "Handoff Host" tier are load-bearing, and they ship first</strong> (screen 6 in the prototype).</span>
+      </div>
+      <p class="prose">The RVshare partnership stays — and becomes bidirectional. Today RVshare's Owner Toolkit sends its owners to Neighbor for storage. Rental-Ready closes the loop: every RVshare-referred RV parked on a consenting lot is <b>day-one rental supply</b>, and every vehicle activated on Neighbor is a storage retention lock. Extend the flywheel, don't kill it.</p>
+    </section>
+    <section id="s2">
+      <div class="eyebrow" data-n="02">Journey map</div>
+      <h2 class="sec-h2">Three actors, one flywheel.</h2>
+      <p class="sec-lede">Every touchpoint Neighbor should modify, by actor and by stage. The five outlined in blue are the must-ship surfaces — <b>click any of them to open that screen in the prototype below.</b> Everything else ships as fast-follow.</p>
+
+      <div class="jm-scroll">
+        <div class="jm">
+          <div></div>
+          <div class="jm__stage">Discover</div>
+          <div class="jm__stage">Activate</div>
+          <div class="jm__stage">Operate</div>
+          <div class="jm__stage">Retain</div>
+
+          <div class="jm__actor">Vehicle owner<small>stores an RV today</small></div>
+          <div class="jm__cell">
+            <div class="thumb"><span class="thumb__mini"><i class="half"></i><i></i><i class="g half"></i></span><span class="thumb__txt">"Rental-ready lot" badge<small>on storage search cards</small></span></div>
+            <div class="thumb"><span class="thumb__mini"><i></i><i class="half"></i><i class="b"></i></span><span class="thumb__txt">Post-booking seed<small>right after reserving storage</small></span></div>
+          </div>
+          <div class="jm__cell">
+            <button class="thumb thumb--built" data-go="0"><span class="thumb__mini thumb__mini--dark"><i class="w half"></i><i class="w"></i><i></i></span><span class="thumb__txt">Billing push<small>the wedge moment</small></span><span class="thumb__chip">→ 1</span></button>
+            <button class="thumb thumb--built" data-go="1"><span class="thumb__mini"><i class="g"></i><i class="g"></i><i class="g"></i><i class="b half"></i></span><span class="thumb__txt">One-tap activation<small>~85% pre-filled</small></span><span class="thumb__chip">→ 2</span></button>
+            <button class="thumb thumb--built" data-go="2"><span class="thumb__mini"><i class="b"></i><i></i><i class="half"></i></span><span class="thumb__txt">Handoff &amp; access<small>the host is the default</small></span><span class="thumb__chip">→ 3</span></button>
+            <div class="thumb"><span class="thumb__mini"><i class="half"></i><i></i><i></i></span><span class="thumb__txt">Eligibility &amp; protection<small>driving check · $1M tier</small></span></div>
+          </div>
+          <div class="jm__cell">
+            <button class="thumb thumb--built" data-go="3"><span class="thumb__mini"><i class="half"></i><i class="g"></i><i class="b"></i></span><span class="thumb__txt">First booking request<small>accept / decline</small></span><span class="thumb__chip">→ 4</span></button>
+            <div class="thumb"><span class="thumb__mini"><i class="half"></i><i></i><i class="half"></i></span><span class="thumb__txt">Departure-day checklist<small>photos · fuel · keys</small></span></div>
+          </div>
+          <div class="jm__cell">
+            <button class="thumb thumb--built" data-go="4"><span class="thumb__mini"><i></i><i class="g"></i><i class="g half"></i></span><span class="thumb__txt">Bill covered<small>−$185/mo → $0</small></span><span class="thumb__chip">→ 5</span></button>
+            <div class="thumb"><span class="thumb__mini"><i class="g half"></i><i></i><i></i></span><span class="thumb__txt">Offset dashboard<small>"3 of 3 months covered"</small></span></div>
+          </div>
+
+          <div class="jm__actor">Storage host<small>owns the lot</small></div>
+          <div class="jm__cell"></div>
+          <div class="jm__cell">
+            <button class="thumb thumb--built" data-go="5"><span class="thumb__mini"><i class="half"></i><i></i><i class="b"></i></span><span class="thumb__txt">Handoff consent<small>paid opt-in · veto kept</small></span><span class="thumb__chip">→ 6</span></button>
+          </div>
+          <div class="jm__cell">
+            <div class="thumb"><span class="thumb__mini"><i></i><i class="half"></i><i></i></span><span class="thumb__txt">Handoff console<small>who's arriving · ID check</small></span></div>
+          </div>
+          <div class="jm__cell"></div>
+
+          <div class="jm__actor">Acquisition<small>new vehicle owners</small></div>
+          <div class="jm__cell">
+            <div class="thumb"><span class="thumb__mini"><i class="g"></i><i class="half"></i><i class="b half"></i></span><span class="thumb__txt">"Store it free" landing<small>storage search sold on offset</small></span></div>
+          </div>
+          <div class="jm__cell"></div>
+          <div class="jm__cell"></div>
+          <div class="jm__cell"></div>
+        </div>
+      </div>
+      <div class="jm-key">
+        <span><i class="built"></i> Must-ship — rendered in the prototype</span>
+        <span><i></i> Fast-follow — thumbnail only</span>
+      </div>
+    </section>
+    <section id="s3">
+    <section id="s3">
+      <div class="eyebrow" data-n="03">Prototype</div>
+      <h2 class="sec-h2">From billing push to rental-ready in five taps.</h2>
+      <p class="sec-lede">A working state machine, not linked pictures: the listing really is pre-filled from the storage record, the booking request really arrives, and choices persist — <b>pick "I'll hand off myself" on screen 3 and watch the payout math change on screen 4.</b> Use ← → arrow keys while presenting.</p>      <div id="proto-mount"></div>
+    </section>
+    <section id="s4">
+      <div class="eyebrow" data-n="04">Metrics &amp; rollout</div>
+      <h2 class="sec-h2">One booking is worth a year of storage margin.</h2>
+      <p class="sec-lede">Storage is a great wedge and a thin margin. Rental on the same asset, on the same lot, is the same relationship at <b>~12× the take per transaction</b> — and it makes the storage side stickier, not weaker.</p>
+
+      <div class="tbl-scroll"><table class="nbt">
+        <thead><tr><th>Per transaction</th><th>Storage today</th><th>Rental proposed</th></tr></thead>
+        <tbody>
+          <tr><td>Typical transaction</td><td class="num">$185 / month</td><td class="num">$580 / booking <small>4 nights × $145</small></td></tr>
+          <tr><td>Neighbor take</td><td class="num">4.9% + $0.30 = <b>$9.37</b><small>host fee</small></td><td class="num money">≈ $116 <small>modeled at 20% gross, incl. renter fees — Outdoorsy runs 20–25%; Neighbor's handoff-cost advantage means it can price under that and still profit</small></td></tr>
+          <tr><td>Equivalent</td><td class="num">1 month of margin</td><td class="num money">≈ 12 months of storage margin, same asset</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="tbl-scroll"><table class="nbt">
+        <thead><tr><th>Metric</th><th>Definition</th><th>Pilot target</th></tr></thead>
+        <tbody>
+          <tr><td>Activation rate <small>north star</small></td><td>% of eligible storage renters who enable rental within 60 days of a billing push</td><td class="num">≥ 5%</td></tr>
+          <tr><td>Time to first booking</td><td>Median days from activation to first accepted request</td><td class="num">≤ 30 days</td></tr>
+          <tr><td>Offset ratio <small>the metric only Neighbor can report</small></td><td>Share of activated owners' storage bills covered by rental earnings</td><td class="num money">≥ 50%</td></tr>
+          <tr><td>Host opt-out rate <small>guardrail</small></td><td>Handoff Hosts who turn handoffs back off per quarter</td><td class="num">&lt; 5%</td></tr>
+          <tr><td>Handoff dispute rate <small>guardrail</small></td><td>Handoffs ending in a damage or access dispute</td><td class="num">&lt; 1%</td></tr>
+          <tr><td>Storage churn, activated cohort <small>guardrail</small></td><td>Must be at or below the non-activated cohort — the retention thesis</td><td class="num">≤ baseline</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="phase-grid">
+        <div class="phase">
+          <div class="phase__n">Phase 1 · Q4 '26</div>
+          <h3>Phoenix pilot</h3>
+          <p>One RV-dense metro. ~200 stored Class B/C vehicles, concierge onboarding, manual vehicle vetting, Neighbor staff shadowing the first 50 handoffs.</p>
+          <div class="phase__gate">Gate: ≥5% activation · &lt;1% disputes</div>
+        </div>
+        <div class="phase">
+          <div class="phase__n">Phase 2 · H1 '27</div>
+          <h3>RVshare cohort</h3>
+          <p>Make the partnership bidirectional: RVshare-referred vehicles arrive rental-eligible, and "store it free" co-marketing turns their owner base into instant supply.</p>
+          <div class="phase__gate">Gate: host opt-in ≥30% in pilot metros</div>
+        </div>
+        <div class="phase">
+          <div class="phase__n">Phase 3 · H2 '27</div>
+          <h3>GA + boats + depot hubs</h3>
+          <p>Boats as the long tail. Commercial-lot operators — the Fifth Wall / Acadia / Jamestown side of the network — become staffed depot hubs with fleet tooling.</p>
+          <div class="phase__gate">Gate: unit economics ≥ pilot at 10× volume</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="eyebrow" data-n="05">Risks</div>
+      <h2 class="sec-h2">What could kill it, and what we'd do about it.</h2>
+      <div class="tbl-scroll"><table class="nbt">
+        <thead><tr><th>Risk</th><th>Why it's real</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td>Insurance coverage</td><td>A stored vehicle and a rented vehicle are different underwriting problems; the $1M host protection doesn't cover a renter driving away.</td><td>Bolt-on rental coverage via a specialty carrier, priced into the renter's service fee — the RVshare/Outdoorsy model. Rental stays off until coverage binds.</td></tr>
+          <tr><td>Host disruption &amp; churn</td><td>Strangers on the lot is exactly what some storage hosts signed up to avoid. Silent resentment becomes supply churn.</td><td>Consent-first (screen 6), per-request veto, frequency caps, and real pay — the Handoff Host tier. Watch the opt-out guardrail weekly.</td></tr>
+          <tr><td>RVshare relationship</td><td>Neighbor's rental side competes with the partner that currently sends it storage demand.</td><td>Frame as bidirectional flywheel and bring them into Phase 2 economics before GA. The renegotiation window is a date on the calendar, not a surprise.</td></tr>
+          <tr><td>First-time-lister quality</td><td>Stored vehicles skew idle; idle vehicles skew unmaintained. A bad first trip burns the renter and the lot.</td><td>Eligibility gates (model year, days since last movement, photo review), a pre-rental inspection add-on Handoff Hosts can perform — for a fee.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h2 class="sec-h2" style="font-size:clamp(22px,2.4vw,28px)">Assumptions to validate in week one</h2>
+      <p class="prose">Five things this design assumes that I'd pressure-test with internal data before writing a line of code: <b>(1)</b> current storage protection is bolt-on-extendable for rental rather than needing a new carrier; <b>(2)</b> identity verification depth today (ID scan on file?) — determines whether rental eligibility is one click or one flow; <b>(3)</b> whether storage hosts can already see what's parked on their lot in real time — shapes the consent UX; <b>(4)</b> the 20% take-rate model against Neighbor's actual cost per handoff; <b>(5)</b> whether commercial-lot operators want fleet tooling now or in Phase 3.</p>
+    </section>
+
+    <section id="s6">
+      <div class="eyebrow" data-n="06">Talk track</div>
+      <h2 class="sec-h2">The 30-second spine.</h2>
+      <p class="sec-lede">Numbers map to the sections on the left — this page is the deck. <b>Placeholder draft; tune to your voice.</b></p>
+      <div class="talk">
+        <p>"Neighbor already has RVshare sending RV owners to us for storage — and we send nobody back.<span class="cue">1</span> Those vehicles sit on our lots, described in our data, generating a bill we deliver every month. That's three advantages no rental marketplace can copy.<span class="cue">2</span> So the journey starts at the bill: not 'earn income' — 'cancel your storage bill.'<span class="cue">3</span> Here's the prototype: billing push to rental-ready in five taps, with the storage host's consent designed in from the start.<span class="cue">4</span> One booking is worth about a year of storage margin on the same asset.<span class="cue">5</span> The risks are real but ownable — insurance first.<span class="cue">6</span> I'd pilot in Phoenix this quarter with the RVshare cohort next."</p>
+        <div class="talk__note">≈ 30 seconds spoken · sections 1–6 in order · prototype is the centerpiece, lead with the phone if time is short.</div>
+      </div>
+    </section>
+
+    <footer class="colophon">
+      <span>Prepared by Tyler Aston for the Neighbor PM take-home · August 2026</span>
+      <span>Built on Neighbor's live design system — tokens extracted from neighbor.com on Aug 23, 2026</span>
+    </footer>
+  </main>
+</div>
+<script>
+/* Neighbor Rental-Ready — shared prototype: markup + state machine.
+   Mounted into #proto-mount on BOTH the walkthrough and the standalone page,
+   so every line of screen copy lives in exactly one place. */
+
+var NB_PHONE_HTML = `      <div class="proto">
+        <div class="phone-col">
+          <div class="actor-chip" id="actorChip"><i></i><span id="actorTxt">Vehicle owner's phone</span></div>
+          <div class="phone-scale">
+          <div class="phone">
+            <div class="notch"></div>
+
+            <!-- Screen 1 · Lock screen push -->
+            <div class="scr scr--lock" data-screen="0">
+              <div class="sbar" style="color:#fff"><span></span><svg width="54" height="12" style="color:#fff"><use href="#i-sb"/></svg></div>
+              <div class="lock-date" id="lockDate">Monday, August 24</div>
+              <div class="lock-time" id="lockTime">9:41</div>
+              <button class="push tap-hint" data-go="1">
+                <span class="push__icon"><svg width="22" height="22"><use href="#i-house"/></svg></span>
+                <span style="flex:1">
+                  <span class="push__meta"><span>NEIGHBOR</span><span>now</span></span>
+                  <span class="push__title">Your <span data-bind="vshort">Minnie</span> cost you $185 this month.</span>
+                  <span class="push__body">It could have earned $474 instead.</span>
+                </span>
+              </button>
+              <div class="lock-foot"><span>Tap the notification</span><div class="homebar"></div></div>
+            </div>
+
+            <!-- Screen 2 · Activation, pre-filled -->
+            <div class="scr" data-screen="1">
+              <div class="sbar"><span id="t1">9:41</span><svg width="54" height="12" style="color:#232323"><use href="#i-sb"/></svg></div>
+              <div class="nb-flow-header">
+                <div class="nb-flow-header__title">Enable rental</div>
+                <div class="nb-flow-progress"><div class="nb-flow-progress__fill" style="transform:scaleX(0.4)"></div></div>
+              </div>
+              <div class="scr-body">
+                <h1 class="scr-h1">Your <span data-bind="vname">Winnebago Minnie</span> is ready to rent.</h1>
+                <p class="scr-sub">We pre-filled your listing from your storage reservation. Confirm one thing and you're live.</p>
+                <div class="nb-step-row nb-step-row--done"><span class="nb-step-row__icon"><svg width="18" height="18" style="color:var(--nb-green)"><use href="#i-check"/></svg></span><span class="nb-step-row__label">Vehicle info<br><small style="font-weight:400;color:var(--nb-text-muted)"><span data-bind="vname">Winnebago Minnie</span> · <span data-bind="vclass">Class C</span> · <span data-bind="vlen">25 ft</span></small></span></div>
+                <div class="nb-step-row nb-step-row--done"><span class="nb-step-row__icon"><svg width="18" height="18" style="color:var(--nb-green)"><use href="#i-check"/></svg></span><span class="nb-step-row__label">Photos<br><small style="font-weight:400;color:var(--nb-text-muted)"><span data-bind="vphotos">6</span> photos from your storage listing</small></span></div>
+                <div class="nb-step-row nb-step-row--done"><span class="nb-step-row__icon"><svg width="18" height="18" style="color:var(--nb-green)"><use href="#i-check"/></svg></span><span class="nb-step-row__label">Location<br><small style="font-weight:400;color:var(--nb-text-muted)"><span data-bind="vlot">Emery's lot · Millcreek, UT</span></small></span></div>
+                <button class="nb-step-row tap-hint" data-go="2" style="width:100%;background:none;border:none;border-bottom:1px solid var(--nb-border);text-align:left;cursor:pointer;font-family:var(--nb-font-body);font-size:16px">
+                  <span class="nb-step-row__icon"><svg width="18" height="18"><use href="#i-key"/></svg></span>
+                  <span class="nb-step-row__label">Access &amp; handoff</span>
+                  <span class="nb-step-row__cta">Start ›</span>
+                </button>
+                <div class="offset-card">A typical booking pays you <b>≈&nbsp;$474</b> — your <span class="was">$185/mo</span> storage bill, covered <b>2½×&nbsp;over</b>.</div>
+              </div>
+            </div>
+
+            <!-- Screen 3 · Handoff & access -->
+            <div class="scr" data-screen="2">
+              <div class="sbar"><span id="t2">9:41</span><svg width="54" height="12" style="color:#232323"><use href="#i-sb"/></svg></div>
+              <div class="nb-flow-header">
+                <div class="nb-flow-header__title">Enable rental</div>
+                <div class="nb-flow-progress"><div class="nb-flow-progress__fill" style="transform:scaleX(0.75)"></div></div>
+              </div>
+              <div class="scr-body">
+                <h1 class="scr-h1">Who hands over the keys?</h1>
+                <div class="nb-radio-card nb-radio-card--selected" id="ho-host" style="margin-bottom:10px">
+                  <span class="nb-radio-card__dot"></span>
+                  <span style="flex:1">
+                    <span style="font-weight:600;display:block">Your storage host — Emery S.</span>
+                    <span style="font-size:13px;line-height:18px;color:var(--nb-text-muted);display:block;margin-top:2px">Emery opted in to handoffs on this lot. Earns $12 per handoff + $20/day for on-site add-ons.</span>
+                  </span>
+                </div>
+                <div class="nb-radio-card" id="ho-self">
+                  <span class="nb-radio-card__dot"></span>
+                  <span style="flex:1">
+                    <span style="font-weight:600;display:block">You handle handoffs yourself</span>
+                    <span style="font-size:13px;line-height:18px;color:var(--nb-text-muted);display:block;margin-top:2px">Best if you live within ~20 minutes of the lot. You keep the handoff fee.</span>
+                  </span>
+                </div>
+                <div class="field-label">When can renters pick up?</div>
+                <div class="days" id="days"></div>
+                <div class="nb-info-tip" style="margin-top:12px">
+                  <svg class="nb-info-tip__icon" width="17" height="17"><use href="#i-bulb"/></svg>
+                  <span>Vehicles available <strong>6+ days a week</strong> get booked <strong>3× more often</strong>.</span>
+                </div>
+                <div class="scr-ctas">
+                  <button class="nb-btn-primary nb-btn-primary--block" data-go="3">Save &amp; continue</button>
+                  <button class="nb-btn-text">Skip for now →</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Screen 4 · Listing live → booking request arrives -->
+            <div class="scr" data-screen="3">
+              <div class="sbar"><span id="t3">9:41</span><svg width="54" height="12" style="color:#232323"><use href="#i-sb"/></svg></div>
+              <button class="inbanner" id="inbanner" data-req="1">
+                <span class="push__icon" style="flex-basis:34px;width:34px;height:34px"><svg width="19" height="19"><use href="#i-house"/></svg></span>
+                <span style="flex:1">
+                  <span class="push__meta"><span>NEIGHBOR</span><span>now</span></span>
+                  <span class="push__title">New booking request 🎉</span>
+                  <span class="push__body"><span id="bannerAmt">$474</span> to you. Respond within 24 hours.</span>
+                </span>
+              </button>
+              <div class="v-splash splash scr-body">
+                <div><span class="bigcheck"><svg width="34" height="34"><use href="#i-check"/></svg></span></div>
+                <h1 class="scr-h1">Your <span data-bind="vname">Winnebago Minnie</span> is live.</h1>
+                <p class="scr-sub" style="max-width:30ch;margin:0 auto">Bookable at <span data-bind="vlotshort">Emery's lot</span>. We'll ping you the moment a request comes in.</p>
+              </div>
+              <div class="v-req scr-body">
+                <div class="nb-flow-header" style="margin-top:-8px"><div class="nb-flow-header__title">Booking request</div></div>
+                <div class="renter-row" style="margin-top:16px">
+                  <span class="avatar">MC</span>
+                  <span class="renter-row__meta"><b>Marcus C.</b>Verified renter · <svg width="12" height="12" style="color:var(--nb-star);vertical-align:-1px"><use href="#i-star"/></svg> 4.9 · 23 trips</span>
+                </div>
+                <div class="trip-card">
+                  <b><span data-bind="dates">Sep 12–16</span> · 4 nights</b> · <span data-bind="vname">Winnebago Minnie</span>
+                  <small id="pickupLine">Handoff by Emery S. at the lot · Fri 2:00 PM</small>
+                  <small id="reqTime">Received today at 9:41 AM</small>
+                </div>
+                <div class="nb-price-panel" style="padding:16px 20px">
+                  <div class="nb-price-panel__row"><span class="nb-price-panel__label">Renter pays · 4 nights × $145</span><span class="nb-price-panel__value-now">$580</span></div>
+                  <div class="nb-price-panel__row" id="hostFeeRow"><span class="nb-price-panel__label">Handoff host (Emery S.)</span><span class="nb-price-panel__label num">− $48</span></div>
+                  <div class="nb-price-panel__row"><span class="nb-price-panel__label">Neighbor service fee ⓘ</span><span class="nb-price-panel__label num">− $58</span></div>
+                  <div class="nb-price-panel__row nb-price-panel__total"><span class="nb-price-panel__label" style="font-weight:600">You earn</span><span class="nb-price-panel__value-now" id="youEarn">$474</span></div>
+                </div>
+                <div class="covers">
+                  <svg width="15" height="15" style="color:var(--nb-green);flex:0 0 15px;margin-top:2px"><use href="#i-check"/></svg>
+                  <span id="coversLine">Accepting covers your storage bill <b>through November</b> — credited automatically.</span>
+                </div>
+                <div class="scr-ctas" style="padding-top:4px">
+                  <button class="nb-btn-primary nb-btn-primary--block" data-go="4">Accept booking</button>
+                  <button class="nb-btn-text" style="color:var(--nb-text-muted)">Decline</button>
+                  <div class="price-note">Payout via Stripe after pickup · $1M protection included</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Screen 5 · Covered -->
+            <div class="scr" data-screen="4">
+              <div class="sbar"><span id="t4">9:41</span><svg width="54" height="12" style="color:#232323"><use href="#i-sb"/></svg></div>
+              <div class="scr-body splash">
+                <div><span class="bigcheck"><svg width="34" height="34"><use href="#i-check"/></svg></span></div>
+                <h1 class="scr-h1">You're rental-ready.</h1>
+                <p class="scr-sub" style="max-width:32ch;margin:0 auto" id="coveredSub">Marcus's trip clears your October and November storage bills — credited automatically.</p>
+                <div class="flip-stage">
+                  <div class="flip" id="flip">
+                    <div class="flip__face flip__face--before"><span class="flip__label">Storage bill</span><span class="flip__amt">−$185/mo</span></div>
+                    <div class="flip__face flip__face--after"><span class="flip__label">Storage bill — covered ✓</span><span class="flip__amt">$0/mo</span></div>
+                  </div>
+                </div>
+                <p class="micro-note">We'll text you the departure-day checklist before pickup.</p>
+                <div class="scr-ctas">
+                  <button class="nb-btn-primary nb-btn-primary--block" data-go="5">Done</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Screen 6 · Storage-host consent (Emery's phone) -->
+            <div class="scr" data-screen="5">
+              <div class="sbar"><span id="t5">9:41</span><svg width="54" height="12" style="color:#232323"><use href="#i-sb"/></svg></div>
+              <div class="nb-flow-header"><div class="nb-flow-header__title">Hosting</div></div>
+              <div class="scr-body">
+                <div class="keyart"><span style="width:64px;height:64px;border-radius:50%;background:var(--nb-blue-info-bg);display:inline-flex;align-items:center;justify-content:center"><svg width="30" height="30"><use href="#i-key"/></svg></span></div>
+                <h1 class="scr-h1" style="text-align:center">Allow rental handoffs on your lot?</h1>
+                <div class="nb-info-tip" style="margin:8px 0 16px">
+                  <svg class="nb-info-tip__icon" width="17" height="17"><use href="#i-bulb"/></svg>
+                  <span>Hosts who opt in earn <strong>$40–120 more per month</strong> and rank higher in search. You approve or decline <strong>every</strong> handoff request.</span>
+                </div>
+                <div class="nb-testimonial">
+                  <span class="avatar avatar--sm nb-testimonial__avatar" style="background:var(--nb-green-tint);color:var(--nb-green)">DR</span>
+                  <span class="nb-testimonial__body">
+                    <span class="nb-testimonial__head"><span class="nb-testimonial__name">Dana R.</span><span class="nb-testimonial__tag">EXAMPLE</span></span>
+                    <span class="nb-testimonial__quote">"I say yes to about 4 handoffs a month and it pays for our streaming subscriptions and then some."</span>
+                  </span>
+                </div>
+                <div class="scr-ctas">
+                  <div class="done-strip" id="consentDone" style="display:none;width:100%">You're a Handoff Host ✓ &nbsp;·&nbsp; +$12 per handoff</div>
+                  <button class="nb-btn-primary nb-btn-primary--block" id="consentBtn">Allow handoffs on my lot</button>
+                  <button class="nb-btn-text">Not for me →</button>
+                  <p class="micro-note">You can change this any time in Settings.</p>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /.phone -->
+          </div><!-- /.phone-scale -->
+          <div class="controls">
+            <button class="ctrl-btn" id="backBtn">‹ Back</button>
+            <div class="dots" id="dots"></div>
+            <button class="ctrl-btn" id="restartBtn">↻ Restart</button>
+          </div>
+        </div><!-- /.phone-col -->
+
+        <aside class="notes" aria-live="polite">
+          <span class="notes__tag">Presenter notes</span>
+          <div class="notes__step" id="nStep">Screen 1 of 6</div>
+          <h3 id="nTitle">The wedge</h3>
+          <p id="nBody">…</p>
+          <div class="notes__pm" id="nPm">…</div>
+          <div class="state-line" id="stateLine"></div>
+        </aside>
+      </div><!-- /.proto -->`;
+
+(function () {
+  var mount = document.getElementById('proto-mount');
+  if (mount) mount.innerHTML = NB_PHONE_HTML;
+})();
+
+(function () {
+  // The pretend storage record every "pre-filled" field renders from.
+  var VEHICLE = { vname: 'Winnebago Minnie', vshort: 'Minnie', vclass: 'Class C', vlen: '25 ft',
+    vphotos: '6', vlot: "Emery's lot · Millcreek, UT", vlotshort: "Emery's lot", bill: 185, host: 'Emery S.' };
+  var S = { screen: 0, handoff: 'host', days: { Su: false, Mo: true, Tu: true, We: true, Th: true, Fr: true, Sa: true }, consented: false };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var $$ = function (sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); };
+  var MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var MOFULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  // Dynamic trip dates: ~3 weeks out, 4 nights, so the demo stays plausible on any day.
+  var now = new Date();
+  var start = new Date(now.getTime() + 19 * 864e5), end = new Date(start.getTime() + 4 * 864e5);
+  var dates = start.getMonth() === end.getMonth()
+    ? MO[start.getMonth()] + ' ' + start.getDate() + '–' + end.getDate()
+    : MO[start.getMonth()] + ' ' + start.getDate() + ' – ' + MO[end.getMonth()] + ' ' + end.getDate();
+  VEHICLE.dates = dates;
+  var m1 = MOFULL[(end.getMonth() + 1) % 12], m2 = MOFULL[(end.getMonth() + 2) % 12];
+
+  $$('[data-bind]').forEach(function (el) { var v = VEHICLE[el.getAttribute('data-bind')]; if (v != null) el.textContent = v; });
+  $('coversLine').innerHTML = 'Accepting covers your storage bill <b>through ' + m2 + '</b> — credited automatically.';
+  $('coveredSub').textContent = "Marcus's trip clears your " + m1 + ' and ' + m2 + ' storage bills — credited automatically.';
+
+  // Clock chrome
+  function fmtTime(d) { var h = d.getHours() % 12 || 12, m = d.getMinutes(); return h + ':' + (m < 10 ? '0' : '') + m; }
+  var DAYS_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  $('lockTime').textContent = fmtTime(now);
+  $('lockDate').textContent = DAYS_FULL[now.getDay()] + ', ' + MOFULL[now.getMonth()] + ' ' + now.getDate();
+  ['t1','t2','t3','t4','t5'].forEach(function (id) { $(id).textContent = fmtTime(now); });
+
+  // Presenter notes per screen
+  var NOTES = [
+    { t: 'The wedge', b: 'Neighbor owns the one moment no rental marketplace can buy: the monthly bill for an idle vehicle. Naming the asset and using the past conditional — <b>“could have earned”</b> — turns a routine charge into regret. Loss aversion, not income appeal.', pm: 'Anchor moment beat post-booking and search badges in the tradeoff: the bill is recurring, emotional, and 100% Neighbor-owned.' },
+    { t: 'The data advantage, visible', b: 'Three of four steps arrive <b>already done</b> — pulled live from the storage record (watch the fields; they render from one JS object). A ~20-minute RVshare listing becomes a 90-second confirmation.', pm: 'Every green check is a form the owner never fills in. Activation rate is the north star; pre-fill is its biggest lever.' },
+    { t: 'The depot advantage, priced', b: "Emery — the storage host — is the <b>default key-handler</b>, and the labor is priced, not assumed: $12 per handoff plus on-site add-ons. Self-handoff exists for owners who live close. <b>Try selecting it</b> — the payout math on the next screen follows.", pm: 'This is the screen Outdoorsy cannot ship: they have no one at the lot to hand over the keys.' },
+    { t: 'Offset math at decision time', b: 'The price panel reuses Neighbor’s green was/now pricing language, but the closing line is the product thesis: <b>accepting makes the storage bill disappear</b>. The notification’s 24-hour window is Neighbor’s real auto-decline rule, and its dollar figure reflects your handoff choice on screen 3.', pm: 'Renter pays $580 · Emery earns $48 · Neighbor takes $58 — every party in the three-sided market is paid on one receipt.' },
+    { t: 'The retention metric', b: 'The flip — <b>−$185/mo becoming $0/mo</b> — is the whole pitch in one animation, in Neighbor’s own discount-green. A storage bill at $0 is a subscription that cannot churn.', pm: '“Offset ratio” — share of storage bills covered by rentals — is a metric no competitor can even compute.' },
+    { t: 'The screen that makes it launchable', b: 'Rewind three weeks, to Emery’s phone: <b>consent ships first</b>. Strangers on the lot is the storage host’s biggest fear, so opt-in is paid, veto is kept per-request, and the ask uses Neighbor’s quiet vouch pattern — no “New feature!” banner.', pm: 'Three-sided marketplaces die at the weakest side. Host opt-out rate is the guardrail metric — watched weekly.' }
+  ];
+
+  var screens = $$('.scr'), dotsWrap = $('dots'), dots = [];
+  for (var i = 0; i < 6; i++) {
+    var d = document.createElement('button');
+    d.className = 'dot'; d.setAttribute('aria-label', 'Screen ' + (i + 1));
+    d.title = ['Push','Activate','Handoff','Request','Covered','Host consent'][i];
+    (function (n) { d.addEventListener('click', function () { go(n); }); })(i);
+    dotsWrap.appendChild(d); dots.push(d);
+  }
+
+  var bannerTimer = null;
+  function payout() { return S.handoff === 'host' ? 474 : 522; }
+  function renderRequest() {
+    $('hostFeeRow').style.display = S.handoff === 'host' ? 'flex' : 'none';
+    $('youEarn').textContent = '$' + payout();
+    $('bannerAmt').textContent = '$' + payout();
+    $('pickupLine').textContent = (S.handoff === 'host' ? 'Handoff by Emery S. at the lot' : 'You hand off at the lot') + ' · 2:00 PM';
+    var rt = new Date();
+    $('reqTime').textContent = 'Received today at ' + fmtTime(rt) + (rt.getHours() < 12 ? ' AM' : ' PM')
+      + ' · respond within 24 hours';
+  }
+  function dayCount() { var n = 0; for (var k in S.days) if (S.days[k]) n++; return n; }
+  function stateText() {
+    return 'live state · handoff: ' + (S.handoff === 'host' ? 'Emery S.' : 'self') + ' · pickup days: ' + dayCount() + '/7 · payout: $' + payout() + (S.consented ? ' · host: opted in' : '');
+  }
+
+  function go(n, opts) {
+    opts = opts || {};
+    S.screen = n;
+    clearTimeout(bannerTimer);
+    var reqScr = screens[3], banner = $('inbanner');
+    if (n === 3) {
+      renderRequest();
+      if (opts.viaSave) {
+        reqScr.classList.remove('req'); banner.classList.remove('in');
+        bannerTimer = setTimeout(function () { banner.classList.add('in'); }, 1500);
+      } else { reqScr.classList.add('req'); banner.classList.remove('in'); }
+    } else { banner.classList.remove('in'); }
+    screens.forEach(function (s, i) { s.classList.toggle('on', i === n); });
+    dots.forEach(function (d, i) { d.classList.toggle('on', i === n); });
+    if (n === 4) { var f = $('flip'); f.classList.remove('go'); void f.offsetWidth; setTimeout(function () { f.classList.add('go'); }, 60); }
+    var host = n === 5;
+    $('actorChip').classList.toggle('host', host);
+    $('actorTxt').textContent = host ? "Emery's phone — storage host, three weeks earlier" : "Vehicle owner's phone";
+    $('nStep').textContent = 'Screen ' + (n + 1) + ' of 6';
+    $('nTitle').textContent = NOTES[n].t;
+    $('nBody').innerHTML = NOTES[n].b;
+    $('nPm').innerHTML = NOTES[n].pm;
+    $('stateLine').textContent = stateText();
+  }
+
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-go]');
+    if (el) {
+      var n = +el.getAttribute('data-go');
+      var fromJourney = el.classList.contains('thumb');
+      go(n, { viaSave: !fromJourney && el.textContent.indexOf('Save') > -1 });
+      if (fromJourney) document.querySelector('.proto').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    if (e.target.closest('[data-req]')) { clearTimeout(bannerTimer); screens[3].classList.add('req'); $('inbanner').classList.remove('in'); renderRequest(); $('stateLine').textContent = stateText(); }
+  });
+
+  // Handoff radio cards + day pills (screen 3)
+  function pickHandoff(which) {
+    S.handoff = which;
+    $('ho-host').classList.toggle('nb-radio-card--selected', which === 'host');
+    $('ho-self').classList.toggle('nb-radio-card--selected', which === 'self');
+    $('stateLine').textContent = stateText();
+  }
+  $('ho-host').addEventListener('click', function () { pickHandoff('host'); });
+  $('ho-self').addEventListener('click', function () { pickHandoff('self'); });
+
+  var DAY_KEYS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  DAY_KEYS.forEach(function (k) {
+    var b = document.createElement('button');
+    b.className = 'day' + (S.days[k] ? ' on' : ''); b.textContent = k[0] === 'T' || k[0] === 'S' ? k : k[0];
+    b.textContent = { Su: 'S', Mo: 'M', Tu: 'T', We: 'W', Th: 'T', Fr: 'F', Sa: 'S' }[k];
+    b.setAttribute('aria-pressed', String(S.days[k])); b.title = k;
+    b.addEventListener('click', function () {
+      S.days[k] = !S.days[k]; b.classList.toggle('on', S.days[k]);
+      b.setAttribute('aria-pressed', String(S.days[k])); $('stateLine').textContent = stateText();
+    });
+    $('days').appendChild(b);
+  });
+
+  $('consentBtn').addEventListener('click', function () {
+    S.consented = true;
+    this.style.display = 'none'; $('consentDone').style.display = 'block';
+    $('stateLine').textContent = stateText();
+  });
+  $('backBtn').addEventListener('click', function () { go(Math.max(0, S.screen - 1)); });
+  $('restartBtn').addEventListener('click', function () {
+    S.handoff = 'host'; S.consented = false;
+    pickHandoff('host');
+    $('consentBtn').style.display = ''; $('consentDone').style.display = 'none';
+    screens[3].classList.remove('req');
+    go(0);
+  });
+
+  // Arrow keys drive the prototype while it's on screen
+  // On the standalone page the prototype IS the page, so keys are always live.
+  var s3 = document.getElementById('s3');
+  var protoInView = !s3;
+  if (s3) new IntersectionObserver(function (es) { es.forEach(function (en) { protoInView = en.isIntersecting; }); }, { threshold: 0.15 }).observe(s3);
+  document.addEventListener('keydown', function (e) {
+    if (!protoInView || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'ArrowRight') { go(Math.min(5, S.screen + 1)); e.preventDefault(); }
+    if (e.key === 'ArrowLeft') { go(Math.max(0, S.screen - 1)); e.preventDefault(); }
+  });
+
+  // Rail scroll-spy — walkthrough only
+  if (document.querySelector('.rail__link')) {
+    var links = $$('.rail__link');
+    new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (en.isIntersecting) links.forEach(function (l) { l.classList.toggle('on', l.getAttribute('href') === '#' + en.target.id); });
+      });
+    }, { rootMargin: '-20% 0px -65% 0px' }).observe(document.getElementById('s1'));
+    ['s2','s3','s4','s5','s6'].forEach(function (id) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (en) {
+          if (en.isIntersecting) links.forEach(function (l) { l.classList.toggle('on', l.getAttribute('href') === '#' + id); });
+        });
+      }, { rootMargin: '-20% 0px -65% 0px' }).observe(document.getElementById(id));
+    });
+  }
+
+  go(0);
+})();
+</script>
