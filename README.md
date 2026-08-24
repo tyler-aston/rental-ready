@@ -11,6 +11,12 @@ for the vehicles already stored on it.
 | **The experience** | `prototype.html` — the clickable six-screen prototype on its own page, with the intro copy around it. |
 | **The live demo** | `demo.html` — the immersive one. No page, no scroll: the device fills the screen on a dark stage, with a screen rail, a presenter-notes drawer and true full screen on `F`. Best for presenting or screen-sharing. |
 
+## Delivery
+
+`Neighbor-Rental-Ready.pdf` is the one-page cover sheet: previews of all three
+versions, each a clickable link. Rebuild it with `python3 build/make-pdf.py`
+(previews live in `build/previews/`).
+
 ## The prototype is a real state machine
 
 Not linked screenshots. Screen copy renders from a single vehicle record, trip dates
