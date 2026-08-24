@@ -22,7 +22,7 @@ Arrow keys (← →) move between screens while presenting.
 ## Layout
 
 ```
-site/                     ← this is what gets deployed
+docs/                     ← this is what GitHub Pages serves
   index.html                the walkthrough
   prototype.html            the experience
   assets/
@@ -54,7 +54,7 @@ python3 build/build.py [BASE_URL]
 address. Serve locally with:
 
 ```bash
-python3 -m http.server 4178 --directory site
+python3 -m http.server 4178 --directory docs
 ```
 
 ## Design system

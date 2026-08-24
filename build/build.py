@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Assemble the two-page Neighbor Rental-Ready site from shared partials.
 
-  site/index.html      the walkthrough  (strategy deliverable, prototype embedded)
-  site/prototype.html  the experience   (standalone clickable prototype)
+  docs/index.html      the walkthrough  (strategy deliverable, prototype embedded)
+  docs/prototype.html  the experience   (standalone clickable prototype)
 
 Both pages mount the SAME phone markup from assets/prototype.js, so screen copy
 lives in exactly one place and cannot drift between the two links.
@@ -13,11 +13,11 @@ import pathlib
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-B, SITE = ROOT / 'build', ROOT / 'site'
+B, SITE = ROOT / 'build', ROOT / 'docs'
 (SITE / 'assets').mkdir(parents=True, exist_ok=True)
 
 BASE = (sys.argv[1] if len(sys.argv) > 1
-        else 'https://tyler-aston.github.io/neighbor-rental-ready').rstrip('/')
+        else 'https://tyler-aston.github.io/rental-ready').rstrip('/')
 
 
 def part(name):
