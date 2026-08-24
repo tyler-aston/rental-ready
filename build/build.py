@@ -225,8 +225,6 @@ demo_page = (head('Rental-Ready Live Demo', DESC_DEMO, 'demo.html',
       <kbd>N</kbd> notes &nbsp;&middot;&nbsp; <kbd>F</kbd> full screen
     </p>
     <p class="mlinks">
-      <button class="mlink" id="notesBtnM">Presenter notes</button>
-      <span class="mlinks__sep">&middot;</span>
       <a class="mlink" href="index.html">Read the walkthrough &rarr;</a>
     </p>
   </div>

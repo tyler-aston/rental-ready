@@ -148,9 +148,18 @@
     if (notesBtn) notesBtn.setAttribute('aria-pressed', String(open));
     fit();
   }
-  [notesBtn, document.getElementById('notesBtnM')].forEach(function (b) {
-    if (b) b.addEventListener('click', function () { setNotes(!notesOpen); });
-  });
+  if (notesBtn) notesBtn.addEventListener('click', function () { setNotes(!notesOpen); });
+
+  // Below 900px the drawer is full-screen and there is no toggle for it — the
+  // one we had read "Presenter notes" over an identically dark panel, so it
+  // never announced itself as the way out. Rather than rely on people finding
+  // an unlabelled exit, the drawer simply cannot be opened at that width, and
+  // it closes itself if the viewport narrows (rotation, or a resized window)
+  // while it happens to be open.
+  function onViewport() {
+    if (window.innerWidth <= 900 && notesOpen) setNotes(false);
+    fit();
+  }
 
   // ------------------------------------------------------------ fullscreen
   var fsBtn = document.getElementById('fsBtn');
@@ -197,22 +206,23 @@
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     var k = e.key.toLowerCase();
     if (k === 'n') { setNotes(!notesOpen); e.preventDefault(); }
+    if (k === 'escape' && notesOpen) { setNotes(false); e.preventDefault(); }
     if (k === 'f') { toggleFs(); e.preventDefault(); }
   });
 
-  window.addEventListener('resize', fit);
-  window.addEventListener('orientationchange', function () { setTimeout(fit, 120); });
+  window.addEventListener('resize', onViewport);
+  window.addEventListener('orientationchange', function () { setTimeout(onViewport, 120); });
   // Belt and braces: mobile browsers collapsing their URL bar change the
   // viewport without reliably firing `resize`, and embedded viewers may not
   // fire it at all. Observing the body catches both (it is the element sized
   // to the viewport; <html> is auto-height and can stay put).
-  if (window.ResizeObserver) new ResizeObserver(fit).observe(document.body);
+  if (window.ResizeObserver) new ResizeObserver(onViewport).observe(document.body);
   // The first measurement can land before the bars have their final height —
   // webfonts in particular change them — and a fit that is only ever computed
   // once leaves the device stuck at the wrong size. Re-run as layout settles.
-  requestAnimationFrame(fit);
-  window.addEventListener('load', fit);
-  setTimeout(fit, 300);
+  requestAnimationFrame(onViewport);
+  window.addEventListener('load', onViewport);
+  setTimeout(onViewport, 300);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
 
   // Notes are worth showing by default only when there is room beside the phone.
