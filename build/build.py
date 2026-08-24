@@ -185,6 +185,56 @@ proto_page = (head('Rental-Ready Prototype', DESC_PROTO, 'prototype.html',
 """)
 (SITE / 'prototype.html').write_text(proto_page)
 
+# --------------------------------------------------------------- demo.html
+# The immersive stage: same phone, same state machine, no page around it.
+DESC_DEMO = ("The Rental-Ready prototype full screen — six clickable screens, "
+             "from a storage billing push to a booked RV.")
+for asset in ('demo.css', 'demo.js'):
+    (SITE / 'assets' / asset).write_text(part(asset))
+
+demo_page = (head('Rental-Ready Live Demo', DESC_DEMO, 'demo.html',
+                  extra='<link rel="stylesheet" href="assets/demo.css">\n')
+             .replace('<body>', '<body class="demo">')
+             + """<div class="stage">
+
+  <header class="hud hud--top">
+    <a class="hud__brand" href="index.html">
+      <svg width="19" height="19" aria-hidden="true"><use href="#i-house"/></svg>
+      <span>Neighbor <b>Rental-Ready</b></span>
+    </a>
+    <span class="hud__spacer"></span>
+    <button class="hud__btn" id="notesBtn" aria-pressed="false">
+      <span class="lbl">Presenter notes</span><kbd>N</kbd>
+    </button>
+    <button class="hud__btn" id="fsBtn" aria-pressed="false">
+      <span class="lbl" id="fsLabel">Full screen</span><kbd>F</kbd>
+    </button>
+    <a class="hud__btn" href="index.html">
+      <span class="lbl">Walkthrough</span>
+      <svg width="13" height="13" aria-hidden="true"><use href="#i-arrow"/></svg>
+    </a>
+  </header>
+
+  <div class="stage__floor">
+    <div id="proto-mount"></div>
+  </div>
+
+  <div class="hud hud--bottom">
+    <p class="hint">
+      <kbd>&larr;</kbd><kbd>&rarr;</kbd> move between screens &nbsp;&middot;&nbsp;
+      <kbd>N</kbd> notes &nbsp;&middot;&nbsp; <kbd>F</kbd> full screen
+    </p>
+  </div>
+
+</div>
+
+<script src="assets/prototype.js"></script>
+<script src="assets/demo.js"></script>
+</body>
+</html>
+""")
+(SITE / 'demo.html').write_text(demo_page)
+
 # ------------------------------------------------------- rental-ready.html
 # The Claude Artifact build: one self-contained file, no external assets.
 # Generated from the SAME partials so the hosted site and the artifact can

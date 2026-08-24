@@ -1,0 +1,196 @@
+/* ============================================================
+   Immersive demo stage — loaded only by demo.html.
+   No scroll, no page chrome: the device owns the viewport.
+
+   The stage is dark on purpose. Most of the app screens are
+   white, so a light ground gives the phone almost no
+   separation; a deep cool charcoal makes it read as a lit
+   object, and lets the navy lock screen sit in the same world.
+   ============================================================ */
+
+.demo {
+  /* stage-only tokens — the design system itself stays light */
+  --st-bg-1: #15181D;
+  --st-bg-2: #0C0E12;
+  --st-glow: rgba(23, 103, 255, 0.20);
+  --st-ink: rgba(255, 255, 255, 0.94);
+  --st-ink-dim: rgba(255, 255, 255, 0.52);
+  --st-ink-faint: rgba(255, 255, 255, 0.34);
+  --st-line: rgba(255, 255, 255, 0.13);
+  --st-fill: rgba(255, 255, 255, 0.07);
+  --st-fill-hi: rgba(255, 255, 255, 0.13);
+
+  --fit: 1;              /* set by demo.js from the viewport */
+  --notes-w: 0px;        /* widens when the notes panel opens */
+
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--st-bg-2);
+  color: var(--st-ink);
+}
+
+.stage {
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(120% 78% at 50% 46%, var(--st-glow) 0%, transparent 62%),
+    linear-gradient(168deg, var(--st-bg-1) 0%, var(--st-bg-2) 72%);
+}
+
+/* Chrome overlays the stage rather than taking layout rows, so the device
+   gets the full viewport height to scale into. It all fades together. */
+.hud--top { position: absolute; top: 0; left: 0; right: 0; z-index: 40; }
+.hud--bottom { position: absolute; bottom: 0; left: 0; right: 0; z-index: 40; }
+.hud--top { padding-right: calc(22px + var(--notes-w)); transition: opacity 400ms var(--nb-ease), padding-right 320ms var(--nb-ease); }
+
+/* ---------------------------------------------------- HUD */
+.hud {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 22px;
+  transition: opacity 400ms var(--nb-ease);
+}
+.hud--bottom {
+  flex-direction: column; align-items: center; gap: 12px;
+  padding-bottom: 20px;
+}
+.demo.idle .hud { opacity: 0; pointer-events: none; }
+
+.hud__brand {
+  display: inline-flex; align-items: center; gap: 9px;
+  color: var(--st-ink); text-decoration: none;
+  font-size: 15px; font-weight: 500; letter-spacing: -0.1px;
+  opacity: 0.92;
+}
+.hud__brand b { font-weight: 700; }
+.hud__spacer { margin-left: auto; }
+
+.hud__btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--st-fill); color: var(--st-ink);
+  border: 1px solid var(--st-line); border-radius: var(--nb-r-full);
+  padding: 8px 15px;
+  font-family: var(--nb-font-body); font-size: 13.5px; font-weight: 500;
+  text-decoration: none; cursor: pointer;
+  transition: background 150ms var(--nb-ease), border-color 150ms var(--nb-ease);
+}
+.hud__btn:hover { background: var(--st-fill-hi); border-color: rgba(255,255,255,0.24); }
+.hud__btn[aria-pressed="true"] { background: rgba(23,103,255,0.24); border-color: rgba(23,103,255,0.62); }
+.hud__btn kbd {
+  font: inherit; font-size: 11px; color: var(--st-ink-faint);
+  border: 1px solid var(--st-line); border-radius: 4px; padding: 0 4px; margin-left: 2px;
+}
+
+/* ------------------------------------------------- the phone */
+.stage__floor {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding-right: var(--notes-w);
+  padding-left: var(--rail-w, 0px);
+  transition: padding-right 320ms var(--nb-ease), padding-left 320ms var(--nb-ease);
+}
+
+/* ------------------------------------------- screen rail (left) ---------
+   A phone can never fill a 16:9 window, so the width either reads as empty
+   or gets a job. This gives it one: jump straight to any screen. */
+.rail-screens {
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  z-index: 40; padding: 0 18px;
+  display: flex; flex-direction: column; gap: 2px;
+  transition: opacity 400ms var(--nb-ease);
+}
+.demo.idle .rail-screens { opacity: 0; pointer-events: none; }
+.rail-screens__hd {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--st-ink-faint); padding: 0 12px 10px;
+}
+.rs {
+  display: flex; align-items: baseline; gap: 11px;
+  background: none; border: 1px solid transparent; border-radius: var(--nb-r-md);
+  padding: 9px 13px; cursor: pointer; text-align: left;
+  font-family: var(--nb-font-body); font-size: 13.5px; line-height: 18px;
+  color: var(--st-ink-dim);
+  transition: color 150ms var(--nb-ease), background 150ms var(--nb-ease), border-color 150ms var(--nb-ease);
+}
+.rs:hover { color: var(--st-ink); background: var(--st-fill); }
+.rs__n { font-size: 11px; font-weight: 600; color: var(--st-ink-faint); font-variant-numeric: tabular-nums; width: 10px; }
+.rs.on { color: var(--st-ink); background: rgba(23,103,255,0.16); border-color: rgba(23,103,255,0.42); }
+.rs.on .rs__n { color: #6FA0FF; }
+.rs__who { display: block; font-size: 11.5px; color: var(--st-ink-faint); margin-top: 1px; }
+
+/* Neutralise the in-page layout that prototype.js ships with:
+   here the phone is the whole composition, not a two-column section. */
+.demo .proto { display: block; margin: 0; gap: 0; }
+.demo .phone-col { display: block; }
+.demo .phone-scale {
+  /* No transition here on purpose: the fit is recomputed on resize and on
+     first paint, and a transitioned transform depends on animation frames
+     arriving — a backgrounded or throttled tab would otherwise render the
+     device unscaled. Resizing should track the pointer anyway. */
+  transform: scale(var(--fit));
+  transform-origin: center center;
+  margin: 0;
+}
+.demo .phone { box-shadow: 0 42px 90px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255,255,255,0.05); }
+
+/* actor chip floats above the device rather than sitting in flow */
+.demo .actor-chip {
+  position: absolute; left: 50%; top: 0; transform: translateX(-50%);
+  background: var(--st-fill); color: var(--st-ink);
+  border-color: var(--st-line); backdrop-filter: blur(8px);
+  z-index: 5;
+}
+.demo .actor-chip i { background: #6FA0FF; }
+.demo .actor-chip.host i { background: #7FD8A8; }
+
+/* controls dock into the bottom HUD */
+.demo .controls { position: static; }
+.demo .ctrl-btn {
+  background: var(--st-fill); color: var(--st-ink); border-color: var(--st-line);
+}
+.demo .ctrl-btn:hover { background: var(--st-fill-hi); }
+.demo .dots { display: none; }   /* the screen rail shows position instead */
+
+/* --------------------------------------------- notes drawer */
+.demo .notes {
+  position: fixed; top: 0; right: 0; bottom: 0; width: 372px;
+  transform: translateX(100%);
+  background: rgba(18, 21, 26, 0.94);
+  backdrop-filter: blur(18px);
+  border-left: 1px solid var(--st-line);
+  padding: 74px 30px 30px;
+  overflow-y: auto;
+  transition: transform 320ms var(--nb-ease);
+  z-index: 30;
+}
+.demo.notes-open .notes { transform: none; }
+.demo .notes__tag { background: var(--st-fill); color: var(--st-ink-dim); }
+.demo .notes__step { color: #6FA0FF; }
+.demo .notes h3 { color: var(--st-ink); }
+.demo .notes p { color: var(--st-ink-dim); }
+.demo .notes p b { color: var(--st-ink); }
+.demo .notes__pm { border-top-color: var(--st-line); color: var(--st-ink-dim); }
+.demo .notes__pm b { color: #7FD8A8; }
+.demo .state-line { color: var(--st-ink-faint); }
+
+/* ------------------------------------------------------ misc */
+.demo :focus-visible { outline-color: #6FA0FF; }
+.hud--bottom .hint { margin: 0; }
+.hint {
+  font-size: 12.5px; color: var(--st-ink-faint);
+  text-align: center;
+}
+.hint kbd {
+  font-family: var(--nb-font-body); font-size: 11px; color: var(--st-ink-dim);
+  border: 1px solid var(--st-line); border-radius: 4px; padding: 1px 5px; margin: 0 1px;
+}
+
+@media (max-width: 1180px) {
+  .rail-screens { display: none; }
+}
+@media (max-width: 900px) {
+  .demo .notes { width: 100%; }
+  .hud__btn .lbl { display: none; }
+  .hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo .notes, .stage__floor, .hud { transition: none; }
+}

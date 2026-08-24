@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rental-Ready Live Demo</title>
+<meta name="description" content="The Rental-Ready prototype full screen — six clickable screens, from a storage billing push to a booked RV.">
+<meta name="author" content="Tyler Aston">
+<!-- Unlisted by request: the link works for anyone it is sent to, but search
+     engines are asked not to index this take-home. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://tyler-aston.github.io/rental-ready/demo.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Neighbor Rental-Ready">
+<meta property="og:title" content="Rental-Ready Live Demo">
+<meta property="og:description" content="The Rental-Ready prototype full screen — six clickable screens, from a storage billing push to a booked RV.">
+<meta property="og:url" content="https://tyler-aston.github.io/rental-ready/demo.html">
+<meta property="og:image" content="https://tyler-aston.github.io/rental-ready/assets/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rental-Ready Live Demo">
+<meta name="twitter:description" content="The Rental-Ready prototype full screen — six clickable screens, from a storage billing push to a booked RV.">
+<meta name="twitter:image" content="https://tyler-aston.github.io/rental-ready/assets/og-card.png">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#1767FF">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Petrona:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="assets/neighbor.css">
+<link rel="stylesheet" href="assets/demo.css">
+</head>
+<body class="demo">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 11.2 12 4l9 7.2"/><path d="M5.6 9.8V20h12.8V9.8"/>
+    </symbol>
+    <symbol id="i-sb" viewBox="0 0 54 12" fill="currentColor">
+      <rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="1" width="3" height="11" rx="1"/>
+      <path d="M27 4.5a7.5 7.5 0 0 1 9.4 0l-1.6 1.9a5 5 0 0 0-6.2 0Zm2.6 3a3.6 3.6 0 0 1 4.2 0L31.7 10Z"/>
+      <rect x="41" y="2.5" width="11" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="43" y="4.5" width="6" height="3" rx="0.8"/><rect x="53" y="4.8" width="1.6" height="2.4" rx="0.8"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4.5 12.6 9.6 17.6 19.5 7"/>
+    </symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9.5 18h5M10.2 21h3.6M12 3a6 6 0 0 0-3.4 10.9c.7.5 1 1.3 1.1 2.1h4.6c.1-.8.4-1.6 1.1-2.1A6 6 0 0 0 12 3Z"/>
+    </symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="14.5" r="4.2"/><path d="M11.2 11.6 19.6 3.4M16.4 6.4l2.6 2.6M13.6 9.2l2.2 2.2"/>
+    </symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21s6.6-5.4 6.6-10.4A6.6 6.6 0 0 0 5.4 10.6C5.4 15.6 12 21 12 21Z"/><circle cx="12" cy="10.4" r="2.4"/>
+    </symbol>
+    <symbol id="i-data" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <ellipse cx="12" cy="5.4" rx="7.4" ry="2.9"/><path d="M4.6 5.4v13.2c0 1.6 3.3 2.9 7.4 2.9s7.4-1.3 7.4-2.9V5.4M4.6 12c0 1.6 3.3 2.9 7.4 2.9s7.4-1.3 7.4-2.9"/>
+    </symbol>
+    <symbol id="i-receipt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 3h12v18l-2.4-1.6L13.2 21l-2.4-1.6L8.4 21 6 19.4Z"/><path d="M9 8h6M9 12h6"/>
+    </symbol>
+    <symbol id="i-star" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 3.6l2.5 5.2 5.7.7-4.2 3.9 1.1 5.6L12 16.2 6.9 19l1.1-5.6-4.2-3.9 5.7-.7Z"/>
+    </symbol>
+    <symbol id="i-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 4h6v6M20 4l-8.4 8.4"/><path d="M18 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V8a1.5 1.5 0 0 1 1.5-1.5H10"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 12h15M13 6l6 6-6 6"/>
+    </symbol>
+  </defs>
+</svg>
+<div class="stage">
+
+  <header class="hud hud--top">
+    <a class="hud__brand" href="index.html">
+      <svg width="19" height="19" aria-hidden="true"><use href="#i-house"/></svg>
+      <span>Neighbor <b>Rental-Ready</b></span>
+    </a>
+    <span class="hud__spacer"></span>
+    <button class="hud__btn" id="notesBtn" aria-pressed="false">
+      <span class="lbl">Presenter notes</span><kbd>N</kbd>
+    </button>
+    <button class="hud__btn" id="fsBtn" aria-pressed="false">
+      <span class="lbl" id="fsLabel">Full screen</span><kbd>F</kbd>
+    </button>
+    <a class="hud__btn" href="index.html">
+      <span class="lbl">Walkthrough</span>
+      <svg width="13" height="13" aria-hidden="true"><use href="#i-arrow"/></svg>
+    </a>
+  </header>
+
+  <div class="stage__floor">
+    <div id="proto-mount"></div>
+  </div>
+
+  <div class="hud hud--bottom">
+    <p class="hint">
+      <kbd>&larr;</kbd><kbd>&rarr;</kbd> move between screens &nbsp;&middot;&nbsp;
+      <kbd>N</kbd> notes &nbsp;&middot;&nbsp; <kbd>F</kbd> full screen
+    </p>
+  </div>
+
+</div>
+
+<script src="assets/prototype.js"></script>
+<script src="assets/demo.js"></script>
+</body>
+</html>

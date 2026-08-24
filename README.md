@@ -8,7 +8,8 @@ for the vehicles already stored on it.
 | | |
 |---|---|
 | **The walkthrough** | `index.html` — the full argument: thesis, journey map, prototype, metrics and rollout, risks, talk track. |
-| **The experience** | `prototype.html` — just the clickable six-screen prototype, on its own page. The link to send to someone who wants to play with it. |
+| **The experience** | `prototype.html` — the clickable six-screen prototype on its own page, with the intro copy around it. |
+| **The live demo** | `demo.html` — the immersive one. No page, no scroll: the device fills the screen on a dark stage, with a screen rail, a presenter-notes drawer and true full screen on `F`. Best for presenting or screen-sharing. |
 
 ## The prototype is a real state machine
 
@@ -28,7 +29,8 @@ docs/                     ← this is what GitHub Pages serves
   assets/
     neighbor.css            design tokens extracted from neighbor.com + page styles
     standalone.css          extra styles for the prototype-only page
-    prototype.js            phone markup + the state machine (shared by both pages)
+    demo.css / demo.js      the immersive stage: fit-to-viewport, rail, drawer
+    prototype.js            phone markup + the state machine (shared by all three pages)
     favicon.svg / .ico / -32.png / apple-touch-icon.png
     og-card.png             1200×630 social preview
 
